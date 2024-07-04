@@ -3,7 +3,6 @@ export enum DirectionsEnum {
   RIGHT = "RIGHT",
   LEFT = "LEFT",
   DOWN = "DOWN",
-  NONE = "NONE",
 }
 
 type ControllerParams = {
@@ -39,8 +38,6 @@ export class Controller {
     if (this.controller.w.isDown) directionsPressed.push(DirectionsEnum.UP);
     if (this.controller.s.isDown) directionsPressed.push(DirectionsEnum.DOWN);
 
-    return directionsPressed.length > 0
-      ? directionsPressed
-      : [DirectionsEnum.NONE];
+    return directionsPressed.length > 0 ? directionsPressed : [];
   }
 }

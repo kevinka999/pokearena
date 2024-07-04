@@ -2,7 +2,7 @@ import { GameObjectConfig } from "../types/game";
 import { AnimationEnums, AssetsEnums } from "../types/keys";
 import { DirectionsEnum } from "./Controller";
 
-type IdleFrameConfig = Partial<{ [key in DirectionsEnum]: number }>;
+type IdleFrameConfig = { [key in DirectionsEnum]: number };
 
 export type PlayerParams = {
   scene: Phaser.Scene;
@@ -12,16 +12,21 @@ export type PlayerParams = {
   tileSize?: number;
 };
 
+const animationMap: { [key in DirectionsEnum]: AnimationEnums } = {
+  [DirectionsEnum.DOWN]: AnimationEnums.POKEMON_DOWN,
+  [DirectionsEnum.UP]: AnimationEnums.POKEMON_UP,
+  [DirectionsEnum.LEFT]: AnimationEnums.POKEMON_LEFT,
+  [DirectionsEnum.RIGHT]: AnimationEnums.POKEMON_RIGHT,
+};
+
 export class Player {
   scene: Phaser.Scene;
   assetKey: AssetsEnums;
   gameObject: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody;
-  facingDirection: DirectionsEnum;
   idleFrameConfig: IdleFrameConfig;
 
   constructor(params: PlayerParams) {
     this.scene = params.scene;
-    this.facingDirection = params.facingDirection ?? DirectionsEnum.DOWN;
     this.idleFrameConfig = params.idleFrameConfig;
     this.assetKey = params.gameObjectConfig.assetKey;
 
@@ -30,7 +35,9 @@ export class Player {
         params.gameObjectConfig.x,
         params.gameObjectConfig.y,
         params.gameObjectConfig.assetKey,
-        this.getAssetFrame()
+        this.getAssetFromDirection(
+          params.facingDirection ?? DirectionsEnum.DOWN
+        )
       )
       .setOrigin(0);
     this.scene.physics.add.existing(this.gameObject, false);
@@ -40,12 +47,46 @@ export class Player {
       this.gameObject.setOrigin(params.gameObjectConfig.origin);
   }
 
-  movePlayer(direction: DirectionsEnum[]) {
-    this.handleMovement(direction);
+  movePlayer(
+    moveDirection: DirectionsEnum[],
+    pointer: { x: number; y: number }
+  ) {
+    const isMoving = moveDirection.length > 0;
+    this.handleMovement(moveDirection);
+
+    const lookDirection = this.getLookDirection(pointer);
+    this.handleAnimation(lookDirection, isMoving);
   }
 
-  private getAssetFrame() {
-    switch (this.facingDirection) {
+  private getLookDirection(pointer: { x: number; y: number }) {
+    const pointerDirectionInGameObjectRelation = Math.trunc(
+      Math.atan2(pointer.y - this.gameObject.y, pointer.x - this.gameObject.x)
+    );
+
+    let direction: DirectionsEnum = DirectionsEnum.DOWN;
+    if (
+      Object.is(pointerDirectionInGameObjectRelation, -0) ||
+      pointerDirectionInGameObjectRelation === -2 ||
+      pointerDirectionInGameObjectRelation === -1
+    ) {
+      direction = DirectionsEnum.UP;
+    } else if (pointerDirectionInGameObjectRelation === 0) {
+      direction = DirectionsEnum.RIGHT;
+    } else if (pointerDirectionInGameObjectRelation === 1) {
+      direction = DirectionsEnum.DOWN;
+    } else if (
+      pointerDirectionInGameObjectRelation === -3 ||
+      pointerDirectionInGameObjectRelation === 2 ||
+      pointerDirectionInGameObjectRelation === 3
+    ) {
+      direction = DirectionsEnum.LEFT;
+    }
+
+    return direction;
+  }
+
+  private getAssetFromDirection(direction: DirectionsEnum) {
+    switch (direction) {
       case DirectionsEnum.DOWN:
         return this.idleFrameConfig.DOWN;
       case DirectionsEnum.UP:
@@ -55,17 +96,15 @@ export class Player {
       case DirectionsEnum.RIGHT:
         return this.idleFrameConfig.RIGHT;
       default:
-        throw new Error("No direction defined");
+        return this.idleFrameConfig.DOWN;
     }
   }
 
   private handleMovement(directions: DirectionsEnum[]) {
-    if (this.isPlayerNotMoving(directions)) {
+    if (directions.length === 0) {
       this.gameObject.body.setVelocity(0);
-      this.stopAnimation();
+      return;
     }
-
-    this.handleAnimation(directions);
 
     if (directions.includes(DirectionsEnum.LEFT)) {
       this.gameObject.body.setVelocityX(-80);
@@ -80,26 +119,15 @@ export class Player {
     }
   }
 
-  private isPlayerNotMoving(directions: DirectionsEnum[]) {
-    return (
-      directions.length === 0 ||
-      (directions.length === 1 && directions.includes(DirectionsEnum.NONE))
-    );
-  }
-
-  private handleAnimation(directions: DirectionsEnum[]) {
-    let animationKey!: AnimationEnums;
-    if (directions.includes(DirectionsEnum.UP)) {
-      animationKey = AnimationEnums.POKEMON_UP;
-    } else if (directions.includes(DirectionsEnum.DOWN)) {
-      animationKey = AnimationEnums.POKEMON_DOWN;
-    } else if (directions.includes(DirectionsEnum.LEFT)) {
-      animationKey = AnimationEnums.POKEMON_LEFT;
-    } else if (directions.includes(DirectionsEnum.RIGHT)) {
-      animationKey = AnimationEnums.POKEMON_RIGHT;
+  private handleAnimation(lookDirection: DirectionsEnum, isMoving: boolean) {
+    if (!isMoving) {
+      const idleFrame = this.idleFrameConfig[lookDirection];
+      this.gameObject.anims.stop();
+      this.gameObject.setFrame(idleFrame);
+      return;
     }
 
-    if (!animationKey) return;
+    const animationKey = animationMap[lookDirection];
     const fullKey = `${this.assetKey}_${animationKey}`;
 
     if (
@@ -108,11 +136,5 @@ export class Player {
     ) {
       this.gameObject.anims.play(fullKey);
     }
-  }
-
-  private stopAnimation() {
-    const idleFrame = this.gameObject.anims.currentAnim?.frames[1].frame.name;
-    this.gameObject.anims.stop();
-    if (idleFrame) this.gameObject.setFrame(idleFrame);
   }
 }

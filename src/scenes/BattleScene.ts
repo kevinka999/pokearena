@@ -19,7 +19,7 @@ export class BattleScene extends Phaser.Scene {
       gameObjectConfig: {
         x: 0,
         y: 0,
-        assetKey: AssetsEnums.CHIMCHAR,
+        assetKey: AssetsEnums.BAYLEEF,
         assetFrame: 7,
         origin: 0,
       },
@@ -29,6 +29,9 @@ export class BattleScene extends Phaser.Scene {
   }
 
   update() {
-    this.pokemon.movePlayer(this.controler.getMovement());
+    this.pokemon.movePlayer(this.controler.getMovement(), {
+      x: this.input.x,
+      y: this.input.y,
+    });
   }
 }
