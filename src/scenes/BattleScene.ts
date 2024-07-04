@@ -1,9 +1,34 @@
-import { SceneEnums } from "../types/scenes";
+import { Controller } from "../classes/Controller";
+import { Pokemon } from "../classes/Pokemon";
+import { SceneEnums, AssetsEnums } from "../types/keys";
 
 export class BattleScene extends Phaser.Scene {
+  pokemon!: Pokemon;
+  controler!: Controller;
+
   constructor() {
     super({
       key: SceneEnums.battle,
+      active: false,
     });
+  }
+
+  create() {
+    this.pokemon = new Pokemon({
+      scene: this,
+      gameObjectConfig: {
+        x: 0,
+        y: 0,
+        assetKey: AssetsEnums.blastoise,
+        assetFrame: 7,
+        origin: 0,
+      },
+    });
+
+    this.controler = new Controller({ scene: this });
+  }
+
+  update() {
+    this.pokemon.movePlayer(this.controler.getMovement());
   }
 }

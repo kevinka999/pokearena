@@ -1,16 +1,22 @@
 import Phaser from "phaser";
-import { BattleScene } from "./scenes/BattleScene";
+import { PreloadScene, BattleScene } from "./scenes";
 
 const game = new Phaser.Game({
   type: Phaser.CANVAS,
-  pixelArt: false,
+  pixelArt: true,
   scale: {
-    parent: "game-container",
-    width: 1024,
-    height: 576,
+    parent: "main-container",
+    width: 320,
+    height: 180,
     mode: Phaser.Scale.FIT,
     autoCenter: Phaser.Scale.CENTER_BOTH,
   },
+  physics: {
+    default: "arcade",
+    arcade: {
+      debug: false,
+    },
+  },
   backgroundColor: "#000000",
-  scene: [BattleScene],
+  scene: [PreloadScene, BattleScene],
 });
