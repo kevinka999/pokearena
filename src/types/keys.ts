@@ -1,27 +1,58 @@
 export enum AssetsEnums {
-  blastoise = "BLASTOISE",
-  bulbasaur = "BULBASAUR",
-  charizard = "CHARIZARD",
-  charmander = "CHARMANDER",
-  charmeleon = "CHARMELEON",
-  ivysaur = "IVYSAUR",
-  squirtle = "SQUIRTLE",
-  venusaur = "VENUSAUR",
-  wartortle = "WARTORTLE",
+  //gen 1
+  BLASTOISE = "BLASTOISE",
+  BULBASAUR = "BULBASAUR",
+  CHARIZARD = "CHARIZARD",
+  CHARMANDER = "CHARMANDER",
+  CHARMELEON = "CHARMELEON",
+  IVYSAUR = "IVYSAUR",
+  SQUIRTLE = "SQUIRTLE",
+  VENUSAUR = "VENUSAUR",
+  WARTORTLE = "WARTORTLE",
+  //gen 2
+  CHIKORITA = "CHIKORITA",
+  BAYLEEF = "BAYLEEF",
+  MEGANIUM = "MEGANIUM",
+  TOTODILE = "TOTODILE",
+  CROCONAW = "CROCONAW",
+  FERALIGATR = "FERALIGATR",
+  CYNDAQUIL = "CYNDAQUIL",
+  QUILAVA = "QUILAVA",
+  TYPHLOSION = "TYPHLOSION",
+  //gen 3
+  TORCHIC = "TORCHIC",
+  COMBUSKEN = "COMBUSKEN",
+  BLAZIKEN = "BLAZIKEN",
+  MUDKIP = "MUDKIP",
+  MARSHTOMP = "MARSHTOMP",
+  SWAMPERT = "SWAMPERT",
+  TREECKO = "TREECKO",
+  GROVYLE = "GROVYLE",
+  SCEPTILE = "SCEPTILE",
+  //gen 4
+  CHIMCHAR = "CHIMCHAR",
+  MONFERNO = "MONFERNO",
+  INFERNAPE = "INFERNAPE",
+  PIPLUP = "PIPLUP",
+  PRINPLUP = "PRINPLUP",
+  EMPOLEON = "EMPOLEON",
+  TURTWIG = "TURTWIG",
+  GROTLE = "GROTLE",
+  TORTERRA = "TORTERRA",
 }
 
 export enum DataEnums {
-  animations = "ANIMATIONS",
+  ANIMATIONS = "ANIMATIONS",
 }
 
 export enum SceneEnums {
-  preload = "PRELOAD_SCENE",
-  battle = "BATTLE_SCENE",
+  PRELOAD = "PRELOAD_SCENE",
+  BATTLE = "BATTLE_SCENE",
 }
 
 export enum AnimationEnums {
-  pokemon_down = "POKEMON_MOVE_DOWN",
-  pokemon_up = "POKEMON_MOVE_UP",
-  pokemon_left = "POKEMON_MOVE_LEFT",
-  pokemon_right = "POKEMON_MOVE_RIGHT",
+  POKEMON_DOWN = "POKEMON_MOVE_DOWN",
+  POKEMON_UP = "POKEMON_MOVE_UP",
+  POKEMON_LEFT = "POKEMON_MOVE_LEFT",
+  POKEMON_RIGHT = "POKEMON_MOVE_RIGHT",
 }

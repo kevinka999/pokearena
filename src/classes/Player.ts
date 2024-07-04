@@ -90,13 +90,13 @@ export class Player {
   private handleAnimation(directions: DirectionsEnum[]) {
     let animationKey!: AnimationEnums;
     if (directions.includes(DirectionsEnum.UP)) {
-      animationKey = AnimationEnums.pokemon_up;
+      animationKey = AnimationEnums.POKEMON_UP;
     } else if (directions.includes(DirectionsEnum.DOWN)) {
-      animationKey = AnimationEnums.pokemon_down;
+      animationKey = AnimationEnums.POKEMON_DOWN;
     } else if (directions.includes(DirectionsEnum.LEFT)) {
-      animationKey = AnimationEnums.pokemon_left;
+      animationKey = AnimationEnums.POKEMON_LEFT;
     } else if (directions.includes(DirectionsEnum.RIGHT)) {
-      animationKey = AnimationEnums.pokemon_right;
+      animationKey = AnimationEnums.POKEMON_RIGHT;
     }
 
     if (!animationKey) return;

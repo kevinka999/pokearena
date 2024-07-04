@@ -13,7 +13,7 @@ type AnimationConfig = {
 export class PreloadScene extends Phaser.Scene {
   constructor() {
     super({
-      key: SceneEnums.preload,
+      key: SceneEnums.PRELOAD,
       active: true,
     });
   }
@@ -30,17 +30,17 @@ export class PreloadScene extends Phaser.Scene {
       );
     }
 
-    this.load.json(DataEnums.animations, "/data/animations.json");
+    this.load.json(DataEnums.ANIMATIONS, "/data/animations.json");
   }
 
   create() {
     this.createAnimations();
-    this.scene.start(SceneEnums.battle);
+    this.scene.start(SceneEnums.BATTLE);
   }
 
   private createAnimations() {
     const animations: AnimationConfig[] = this.cache.json.get(
-      DataEnums.animations
+      DataEnums.ANIMATIONS
     );
 
     for (const assetKey in AssetsEnums) {

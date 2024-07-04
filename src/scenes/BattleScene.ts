@@ -8,7 +8,7 @@ export class BattleScene extends Phaser.Scene {
 
   constructor() {
     super({
-      key: SceneEnums.battle,
+      key: SceneEnums.BATTLE,
       active: false,
     });
   }
@@ -19,7 +19,7 @@ export class BattleScene extends Phaser.Scene {
       gameObjectConfig: {
         x: 0,
         y: 0,
-        assetKey: AssetsEnums.blastoise,
+        assetKey: AssetsEnums.CHIMCHAR,
         assetFrame: 7,
         origin: 0,
       },
