@@ -30,8 +30,8 @@ export class BattleScene extends Phaser.Scene {
 
   update() {
     this.#pokemon.movePlayer(this.#controler.getMovement(), {
-      x: this.input.x,
-      y: this.input.y,
+      x: this.input.mousePointer.worldX,
+      y: this.input.mousePointer.worldY,
     });
   }
 }
