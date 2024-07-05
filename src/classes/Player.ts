@@ -41,7 +41,7 @@ export class Player {
       )
       .setOrigin(0);
     this.#scene.physics.add.existing(this.gameObject, false);
-    // this.#gameObject.body.setCollideWorldBounds(true);
+    this.#gameObject.body.setCollideWorldBounds(true);
 
     if (params.gameObjectConfig.origin !== undefined) {
       this.gameObject.setOrigin(

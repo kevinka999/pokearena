@@ -26,6 +26,9 @@ export class BattleScene extends Phaser.Scene {
         assetFrame: 7,
       },
     });
+
+    this.cameras.main.startFollow(this.#pokemon.gameObject);
+    this.#setBoundsConfigs();
   }
 
   update() {
@@ -33,5 +36,21 @@ export class BattleScene extends Phaser.Scene {
       x: this.input.mousePointer.worldX,
       y: this.input.mousePointer.worldY,
     });
+  }
+
+  #setBoundsConfigs() {
+    this.physics.world.setBounds(
+      0,
+      0,
+      this.#background.displayWidth,
+      this.#background.displayHeight
+    );
+
+    this.cameras.main.setBounds(
+      0,
+      0,
+      this.#background.displayWidth,
+      this.#background.displayHeight
+    );
   }
 }
