@@ -17,12 +17,12 @@ type Controllers = {
 };
 
 export class Controller {
-  scene: Phaser.Scene;
-  controller: Controllers;
+  #scene: Phaser.Scene;
+  #controller: Controllers;
 
   constructor(params: ControllerParams) {
-    this.scene = params.scene;
-    this.controller = this.scene.input.keyboard?.addKeys({
+    this.#scene = params.scene;
+    this.#controller = this.#scene.input.keyboard?.addKeys({
       w: Phaser.Input.Keyboard.KeyCodes.W,
       s: Phaser.Input.Keyboard.KeyCodes.S,
       a: Phaser.Input.Keyboard.KeyCodes.A,
@@ -33,10 +33,10 @@ export class Controller {
   getMovement(): DirectionsEnum[] {
     let directionsPressed: DirectionsEnum[] = [];
 
-    if (this.controller.a.isDown) directionsPressed.push(DirectionsEnum.LEFT);
-    if (this.controller.d.isDown) directionsPressed.push(DirectionsEnum.RIGHT);
-    if (this.controller.w.isDown) directionsPressed.push(DirectionsEnum.UP);
-    if (this.controller.s.isDown) directionsPressed.push(DirectionsEnum.DOWN);
+    if (this.#controller.a.isDown) directionsPressed.push(DirectionsEnum.LEFT);
+    if (this.#controller.d.isDown) directionsPressed.push(DirectionsEnum.RIGHT);
+    if (this.#controller.w.isDown) directionsPressed.push(DirectionsEnum.UP);
+    if (this.#controller.s.isDown) directionsPressed.push(DirectionsEnum.DOWN);
 
     return directionsPressed.length > 0 ? directionsPressed : [];
   }

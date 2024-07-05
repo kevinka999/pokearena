@@ -3,8 +3,9 @@ import { Pokemon } from "../classes/Pokemon";
 import { SceneEnums, AssetsEnums } from "../types/keys";
 
 export class BattleScene extends Phaser.Scene {
-  pokemon!: Pokemon;
-  controler!: Controller;
+  #pokemon!: Pokemon;
+  #controler!: Controller;
+  #background!: Phaser.GameObjects.Image;
 
   constructor() {
     super({
@@ -14,22 +15,21 @@ export class BattleScene extends Phaser.Scene {
   }
 
   create() {
-    this.pokemon = new Pokemon({
+    this.#controler = new Controller({ scene: this });
+    this.#background = this.add.image(0, 0, "map").setOrigin(0);
+    this.#pokemon = new Pokemon({
       scene: this,
       gameObjectConfig: {
         x: 0,
         y: 0,
         assetKey: AssetsEnums.BAYLEEF,
         assetFrame: 7,
-        origin: 0,
       },
     });
-
-    this.controler = new Controller({ scene: this });
   }
 
   update() {
-    this.pokemon.movePlayer(this.controler.getMovement(), {
+    this.#pokemon.movePlayer(this.#controler.getMovement(), {
       x: this.input.x,
       y: this.input.y,
     });

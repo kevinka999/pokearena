@@ -8,5 +8,5 @@ export type GamePosition = {
 export type GameObjectConfig = {
   assetKey: AssetsEnums;
   assetFrame?: number;
-  origin?: number;
+  origin?: { x?: number; y?: number };
 } & GamePosition;

@@ -19,6 +19,8 @@ export class PreloadScene extends Phaser.Scene {
   }
 
   preload() {
+    this.load.image("map", "/map.png");
+
     for (const assetKey in AssetsEnums) {
       this.load.spritesheet(
         assetKey.toUpperCase(),

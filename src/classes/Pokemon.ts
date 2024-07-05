@@ -54,10 +54,10 @@ export const PokemonMoves: { [key in MovesEnum]: MovesInfo } = Object.freeze({
 });
 
 export class Pokemon extends Player {
-  level?: number;
-  stats?: Status;
-  type?: PokemonTypes;
-  movesAvailable?: MovesInfo[];
+  #level?: number;
+  #stats?: Status;
+  #type?: PokemonTypes;
+  #movesAvailable?: MovesInfo[];
 
   constructor(params: PokemonParams) {
     super({
@@ -71,9 +71,9 @@ export class Pokemon extends Player {
       },
     });
 
-    this.level = params.level;
-    this.stats = params.status;
-    this.type = params.type;
-    this.movesAvailable = params.moves;
+    this.#level = params.level;
+    this.#stats = params.status;
+    this.#type = params.type;
+    this.#movesAvailable = params.moves;
   }
 }
