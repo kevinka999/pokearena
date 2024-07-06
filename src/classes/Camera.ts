@@ -16,7 +16,7 @@ export class Camera {
   #lastFollowOffsetToGo: FollowOffset;
   #followOffsetTween?: Tweens.Tween;
   #offsetDistancePx = 20;
-  #timeToOffsetMs = 200;
+  #timeToOffsetMs = 500;
 
   constructor(params: ControllerParams) {
     this.#scene = params.scene;
