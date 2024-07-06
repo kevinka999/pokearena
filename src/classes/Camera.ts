@@ -15,6 +15,8 @@ export class Camera {
   #scene: Phaser.Scene;
   #lastFollowOffsetToGo: FollowOffset;
   #followOffsetTween?: Tweens.Tween;
+  #offsetDistancePx = 20;
+  #timeToOffsetMs = 200;
 
   constructor(params: ControllerParams) {
     this.#scene = params.scene;
@@ -31,23 +33,7 @@ export class Camera {
   }
 
   handleMovingFollowOffset(movingDirection: DirectionsEnum[]) {
-    let offsetToGo: FollowOffset = { x: 0, y: 0 };
-
-    if (movingDirection.length === 0) {
-      offsetToGo = { x: 0, y: 0 };
-    } else {
-      if (movingDirection.includes(DirectionsEnum.LEFT)) {
-        offsetToGo = { x: 20, y: 0 };
-      } else if (movingDirection.includes(DirectionsEnum.RIGHT)) {
-        offsetToGo = { x: -20, y: 0 };
-      }
-
-      if (movingDirection.includes(DirectionsEnum.UP)) {
-        offsetToGo = { x: 0, y: 20 };
-      } else if (movingDirection.includes(DirectionsEnum.DOWN)) {
-        offsetToGo = { x: 0, y: -20 };
-      }
-    }
+    const offsetToGo = this.#getOffsetPositionFromDirections(movingDirection);
 
     if (
       this.#lastFollowOffsetToGo.x !== offsetToGo.x ||
@@ -70,11 +56,45 @@ export class Camera {
       },
       x: offsetToGo.x,
       y: offsetToGo.y,
-      duration: 150,
+      ease: Phaser.Math.Easing.Cubic.Out,
+      duration: this.#getTimeRelativeToDistance(offsetToGo),
       onUpdate: function (_tween, value) {
         this.main.setFollowOffset(Math.trunc(value.x), Math.trunc(value.y));
       },
       callbackScope: this.#scene.cameras,
     });
+  }
+
+  #getOffsetPositionFromDirections(movingDirection: DirectionsEnum[]) {
+    let offsetToGo: FollowOffset = { x: 0, y: 0 };
+    if (movingDirection.length === 0) return offsetToGo;
+
+    if (movingDirection.includes(DirectionsEnum.LEFT)) {
+      offsetToGo.x = this.#offsetDistancePx;
+    } else if (movingDirection.includes(DirectionsEnum.RIGHT)) {
+      offsetToGo.x = -this.#offsetDistancePx;
+    }
+
+    if (movingDirection.includes(DirectionsEnum.UP)) {
+      offsetToGo.y = this.#offsetDistancePx;
+    } else if (movingDirection.includes(DirectionsEnum.DOWN)) {
+      offsetToGo.y = -this.#offsetDistancePx;
+    }
+
+    return offsetToGo;
+  }
+
+  #getTimeRelativeToDistance(offsetToGo: FollowOffset) {
+    const distanceBetweenX = Math.abs(
+      this.#scene.cameras.main.followOffset.x - offsetToGo.x
+    );
+    const distanceBetweenY = Math.abs(
+      this.#scene.cameras.main.followOffset.y - offsetToGo.y
+    );
+
+    const relativeTimePerPixel = this.#timeToOffsetMs / this.#offsetDistancePx;
+    const biggestDistanceToRun =
+      distanceBetweenX > distanceBetweenY ? distanceBetweenX : distanceBetweenY;
+    return biggestDistanceToRun * relativeTimePerPixel;
   }
 }
