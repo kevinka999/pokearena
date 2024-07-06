@@ -56,13 +56,13 @@ export class Player {
   }
 
   movePlayer(
-    moveDirection: DirectionsEnum[],
+    moveDirections: DirectionsEnum[],
     pointer: { x: number; y: number }
   ) {
-    const isMoving = moveDirection.length > 0;
-    this.#handleMovement(moveDirection);
+    this.#handleMovement(moveDirections);
 
     const lookDirection = this.#getLookDirection(pointer);
+    const isMoving = moveDirections.length > 0;
     this.#handleAnimation(lookDirection, isMoving);
   }
 

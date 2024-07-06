@@ -1,3 +1,4 @@
+import { Camera } from "../classes/Camera";
 import { Controller } from "../classes/Controller";
 import { Pokemon } from "../classes/Pokemon";
 import { SceneEnums, AssetsEnums } from "../types/keys";
@@ -5,6 +6,7 @@ import { SceneEnums, AssetsEnums } from "../types/keys";
 export class BattleScene extends Phaser.Scene {
   #pokemon!: Pokemon;
   #controler!: Controller;
+  #camera!: Camera;
   #background!: Phaser.GameObjects.Image;
 
   constructor() {
@@ -24,33 +26,35 @@ export class BattleScene extends Phaser.Scene {
         y: 0,
         assetKey: AssetsEnums.BAYLEEF,
         assetFrame: 7,
+        origin: { x: 0.5, y: 0.5 },
       },
     });
-
-    this.cameras.main.startFollow(this.#pokemon.gameObject);
-    this.#setBoundsConfigs();
-  }
-
-  update() {
-    this.#pokemon.movePlayer(this.#controler.getMovement(), {
-      x: this.input.mousePointer.worldX,
-      y: this.input.mousePointer.worldY,
+    this.#camera = new Camera({
+      scene: this,
+      followObject: this.#pokemon.gameObject,
+      bounds: [
+        0,
+        0,
+        this.#background.displayWidth,
+        this.#background.displayHeight,
+      ],
     });
-  }
 
-  #setBoundsConfigs() {
     this.physics.world.setBounds(
       0,
       0,
       this.#background.displayWidth,
       this.#background.displayHeight
     );
+  }
 
-    this.cameras.main.setBounds(
-      0,
-      0,
-      this.#background.displayWidth,
-      this.#background.displayHeight
-    );
+  update() {
+    const pointer = {
+      x: this.input.mousePointer.worldX,
+      y: this.input.mousePointer.worldY,
+    };
+    const movements = this.#controler.getMovement();
+    this.#pokemon.movePlayer(movements, pointer);
+    this.#camera.handleMovingFollowOffset(movements);
   }
 }
