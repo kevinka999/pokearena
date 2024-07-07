@@ -1,30 +1,31 @@
+import { BridgeBackground } from "../backgrounds/BridgeBackground";
 import { Camera } from "../classes/Camera";
 import { Controller } from "../classes/Controller";
 import { Pokemon } from "../classes/Pokemon";
-import { SceneEnums, AssetsEnums } from "../types/keys";
+import { SceneKeysEnums, AssetsKeysEnums } from "../types/keys";
 
 export class BattleScene extends Phaser.Scene {
   #pokemon!: Pokemon;
   #controler!: Controller;
   #camera!: Camera;
-  #background!: Phaser.GameObjects.Image;
+  #background!: BridgeBackground;
 
   constructor() {
     super({
-      key: SceneEnums.BATTLE,
+      key: SceneKeysEnums.BATTLE,
       active: false,
     });
   }
 
   create() {
     this.#controler = new Controller({ scene: this });
-    this.#background = this.add.image(0, 0, "map").setOrigin(0);
+    this.#background = new BridgeBackground({ scene: this });
     this.#pokemon = new Pokemon({
       scene: this,
       gameObjectConfig: {
         x: 0,
         y: 0,
-        assetKey: AssetsEnums.BAYLEEF,
+        assetKey: AssetsKeysEnums.BAYLEEF,
         assetFrame: 7,
         origin: { x: 0.5, y: 0.5 },
       },

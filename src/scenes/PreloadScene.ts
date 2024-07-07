@@ -1,4 +1,9 @@
-import { AssetsEnums, DataEnums, SceneEnums } from "../types/keys";
+import {
+  AssetsKeysEnums,
+  DataKeysEnums,
+  MapKeysEnums,
+  SceneKeysEnums,
+} from "../types/keys";
 
 type AnimationConfig = {
   key: string;
@@ -13,15 +18,19 @@ type AnimationConfig = {
 export class PreloadScene extends Phaser.Scene {
   constructor() {
     super({
-      key: SceneEnums.PRELOAD,
+      key: SceneKeysEnums.PRELOAD,
       active: true,
     });
   }
 
   preload() {
-    this.load.image("map", "/map.png");
+    this.load.image(MapKeysEnums.BRIDGE_FULLMAP, "/map/map.png");
+    this.load.tilemapTiledJSON(
+      MapKeysEnums.BRIDGE_TILECONFIG,
+      "/map/config.json"
+    );
 
-    for (const assetKey in AssetsEnums) {
+    for (const assetKey in AssetsKeysEnums) {
       this.load.spritesheet(
         assetKey.toUpperCase(),
         `/assets/pokemon/${assetKey.toLowerCase()}.png`,
@@ -32,20 +41,20 @@ export class PreloadScene extends Phaser.Scene {
       );
     }
 
-    this.load.json(DataEnums.ANIMATIONS, "/data/animations.json");
+    this.load.json(DataKeysEnums.ANIMATIONS, "/data/animations.json");
   }
 
   create() {
     this.createAnimations();
-    this.scene.start(SceneEnums.BATTLE);
+    this.scene.start(SceneKeysEnums.BATTLE);
   }
 
   private createAnimations() {
     const animations: AnimationConfig[] = this.cache.json.get(
-      DataEnums.ANIMATIONS
+      DataKeysEnums.ANIMATIONS
     );
 
-    for (const assetKey in AssetsEnums) {
+    for (const assetKey in AssetsKeysEnums) {
       animations?.forEach((animation) => {
         this.anims.create({
           key: `${assetKey.toUpperCase()}_${animation.key}`,

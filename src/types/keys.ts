@@ -1,4 +1,4 @@
-export enum AssetsEnums {
+export enum AssetsKeysEnums {
   //gen 1
   BLASTOISE = "BLASTOISE",
   BULBASAUR = "BULBASAUR",
@@ -41,16 +41,23 @@ export enum AssetsEnums {
   TORTERRA = "TORTERRA",
 }
 
-export enum DataEnums {
+export enum MapKeysEnums {
+  BRIDGE_FULLMAP = "BRIDGE_FULLMAP",
+  BRIDGE_FOREGROUND = "BRIDGE_FOREGROUND",
+  BRIDGE_COLISION = "BRIDGE_COLISION",
+  BRIDGE_TILECONFIG = "BRIDGE_TILECONFIG",
+}
+
+export enum DataKeysEnums {
   ANIMATIONS = "ANIMATIONS",
 }
 
-export enum SceneEnums {
+export enum SceneKeysEnums {
   PRELOAD = "PRELOAD_SCENE",
   BATTLE = "BATTLE_SCENE",
 }
 
-export enum AnimationEnums {
+export enum AnimationKeysEnums {
   POKEMON_DOWN = "POKEMON_MOVE_DOWN",
   POKEMON_UP = "POKEMON_MOVE_UP",
   POKEMON_LEFT = "POKEMON_MOVE_LEFT",

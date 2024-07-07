@@ -1,5 +1,5 @@
 import { GameObjectConfig } from "../types/game";
-import { AnimationEnums, AssetsEnums } from "../types/keys";
+import { AnimationKeysEnums, AssetsKeysEnums } from "../types/keys";
 import { DirectionsEnum } from "./Controller";
 
 type IdleFrameConfig = { [key in DirectionsEnum]: number };
@@ -12,16 +12,16 @@ export type PlayerParams = {
   tileSize?: number;
 };
 
-const animationMap: { [key in DirectionsEnum]: AnimationEnums } = {
-  [DirectionsEnum.DOWN]: AnimationEnums.POKEMON_DOWN,
-  [DirectionsEnum.UP]: AnimationEnums.POKEMON_UP,
-  [DirectionsEnum.LEFT]: AnimationEnums.POKEMON_LEFT,
-  [DirectionsEnum.RIGHT]: AnimationEnums.POKEMON_RIGHT,
+const animationMap: { [key in DirectionsEnum]: AnimationKeysEnums } = {
+  [DirectionsEnum.DOWN]: AnimationKeysEnums.POKEMON_DOWN,
+  [DirectionsEnum.UP]: AnimationKeysEnums.POKEMON_UP,
+  [DirectionsEnum.LEFT]: AnimationKeysEnums.POKEMON_LEFT,
+  [DirectionsEnum.RIGHT]: AnimationKeysEnums.POKEMON_RIGHT,
 };
 
 export class Player {
   #scene: Phaser.Scene;
-  #assetKey: AssetsEnums;
+  #assetKey: AssetsKeysEnums;
   #gameObject: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody;
   #idleFrameConfig: IdleFrameConfig;
 
