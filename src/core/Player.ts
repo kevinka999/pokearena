@@ -1,5 +1,5 @@
 import { GameObjectConfig } from "../types/game";
-import { AnimationKeysEnums, AssetsKeysEnums } from "../types/keys";
+import { AnimationKeysEnums } from "../types/keys";
 import { DirectionsEnum } from "./Controller";
 
 type IdleFrameConfig = { [key in DirectionsEnum]: number };
@@ -21,7 +21,7 @@ const animationMap: { [key in DirectionsEnum]: AnimationKeysEnums } = {
 
 export class Player {
   #scene: Phaser.Scene;
-  #assetKey: AssetsKeysEnums;
+  #assetKey: string;
   #gameObject: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody;
   #idleFrameConfig: IdleFrameConfig;
 
@@ -29,7 +29,7 @@ export class Player {
     this.#scene = params.scene;
     this.#idleFrameConfig = params.idleFrameConfig;
     this.#assetKey = params.gameObjectConfig.assetKey;
-
+    console.log(params.gameObjectConfig.assetKey);
     this.#gameObject = this.#scene.physics.add
       .sprite(
         params.gameObjectConfig.x,

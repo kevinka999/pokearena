@@ -1,8 +1,9 @@
 import {
-  AssetsKeysEnums,
+  PokemonKeysEnums,
   DataKeysEnums,
   MapKeysEnums,
   SceneKeysEnums,
+  AttacksKeysEnums,
 } from "../types/keys";
 
 type AnimationConfig = {
@@ -27,13 +28,24 @@ export class PreloadScene extends Phaser.Scene {
     this.load.image(MapKeysEnums.TILESET, "/map/tileset.png");
     this.load.tilemapTiledJSON(MapKeysEnums.MAPCONFIG, "/map/map_config.json");
 
-    for (const assetKey in AssetsKeysEnums) {
+    for (const pokemonKey in PokemonKeysEnums) {
       this.load.spritesheet(
-        assetKey.toUpperCase(),
-        `/assets/pokemon/${assetKey.toLowerCase()}.png`,
+        pokemonKey.toUpperCase(),
+        `/assets/pokemon/${pokemonKey.toLowerCase()}.png`,
         {
           frameWidth: 32,
           frameHeight: 32,
+        }
+      );
+    }
+
+    for (const attackKey in AttacksKeysEnums) {
+      this.load.spritesheet(
+        attackKey.toUpperCase(),
+        `/assets/attacks/${attackKey.toLowerCase()}.png`,
+        {
+          frameWidth: 16,
+          frameHeight: 16,
         }
       );
     }
@@ -42,16 +54,22 @@ export class PreloadScene extends Phaser.Scene {
   }
 
   create() {
-    this.createAnimations();
+    this.anims.create({
+      key: `${AttacksKeysEnums.RAZOR_LEAF}_ANIM`,
+      frames: this.anims.generateFrameNumbers(AttacksKeysEnums.RAZOR_LEAF),
+      frameRate: 20,
+    });
+
+    this.#createAnimations();
     this.scene.start(SceneKeysEnums.BATTLE);
   }
 
-  private createAnimations() {
+  #createAnimations() {
     const animations: AnimationConfig[] = this.cache.json.get(
       DataKeysEnums.ANIMATIONS
     );
 
-    for (const assetKey in AssetsKeysEnums) {
+    for (const assetKey in PokemonKeysEnums) {
       animations?.forEach((animation) => {
         this.anims.create({
           key: `${assetKey.toUpperCase()}_${animation.key}`,

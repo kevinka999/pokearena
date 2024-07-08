@@ -1,5 +1,6 @@
 import { Background, Camera, Controller, Pokemon } from "../core";
-import { SceneKeysEnums, AssetsKeysEnums } from "../types/keys";
+import { Bayleef } from "../pokemons/Bayleef";
+import { SceneKeysEnums, PokemonKeysEnums } from "../types/keys";
 
 export class BattleScene extends Phaser.Scene {
   #pokemon!: Pokemon;
@@ -17,15 +18,9 @@ export class BattleScene extends Phaser.Scene {
   create() {
     this.#controler = new Controller({ scene: this });
     this.#background = new Background({ scene: this });
-    this.#pokemon = new Pokemon({
+    this.#pokemon = new Bayleef({
       scene: this,
-      gameObjectConfig: {
-        x: 0,
-        y: 0,
-        assetKey: AssetsKeysEnums.BAYLEEF,
-        assetFrame: 7,
-        origin: { x: 0.5, y: 0.5 },
-      },
+      level: 100,
     });
     this.#camera = new Camera({
       scene: this,
@@ -51,5 +46,10 @@ export class BattleScene extends Phaser.Scene {
     const movements = this.#controler.getMovement();
     this.#pokemon.movePlayer(movements, pointer);
     this.#camera.handleMovingFollowOffset(movements);
+
+    const attack = this.#controler.pressedPrimaryAttack();
+    if (attack) {
+      this.#pokemon.primaryAttack();
+    }
   }
 }

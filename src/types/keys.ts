@@ -1,4 +1,4 @@
-export enum AssetsKeysEnums {
+export enum PokemonKeysEnums {
   //gen 1
   BLASTOISE = "BLASTOISE",
   BULBASAUR = "BULBASAUR",
@@ -39,6 +39,10 @@ export enum AssetsKeysEnums {
   TURTWIG = "TURTWIG",
   GROTLE = "GROTLE",
   TORTERRA = "TORTERRA",
+}
+
+export enum AttacksKeysEnums {
+  RAZOR_LEAF = "RAZOR_LEAF",
 }
 
 export enum MapKeysEnums {

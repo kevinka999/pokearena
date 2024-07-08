@@ -1,68 +1,48 @@
+import { Attack, AttackBaseParams } from "./Attack";
 import { DirectionsEnum } from "./Controller";
 import { Player, PlayerParams } from "./Player";
 
-enum PokemonTypes {
-  water = "water",
-  fire = "fire",
-  grass = "grass",
+export enum PokemonTypes {
+  WATER = "water",
+  FIRE = "fire",
+  GRASS = "grass",
 }
 
-enum MovesEnum {
-  ember = "ember",
-  waterGun = "water_gun",
-  razorLeaf = "razor_leaf",
-}
-
-type MovesInfo = {
-  name: string;
-  damage: number;
-  type: PokemonTypes;
+export type PokemonIvs = {
+  HP: number;
+  ATTACK: number;
+  SP_ATTACK: number;
+  DEFENSE: number;
+  SP_DEFENSE: number;
+  SPEED: number;
 };
 
-type Status = {
-  hp: number;
-  attack: number;
-  spAttack: number;
-  defense: number;
-  spDefense: number;
-  speed: number;
+type Moveset = {
+  primary: new (params: AttackBaseParams) => Attack;
+  secondary: new (params: AttackBaseParams) => Attack;
 };
 
-export type PokemonParams = {
-  level?: number;
-  status?: Status;
-  type?: PokemonTypes;
-  moves?: [MovesInfo];
-} & Omit<PlayerParams, "idleFrameConfig">;
-
-export const PokemonMoves: { [key in MovesEnum]: MovesInfo } = Object.freeze({
-  [MovesEnum.ember]: {
-    name: "Ember",
-    damage: 40,
-    type: PokemonTypes.fire,
-  },
-  [MovesEnum.waterGun]: {
-    name: "Water gun",
-    damage: 40,
-    type: PokemonTypes.water,
-  },
-  [MovesEnum.razorLeaf]: {
-    name: "Razor leaf",
-    damage: 40,
-    type: PokemonTypes.grass,
-  },
-});
+export type PokemonBaseParams = {
+  level: number;
+  ivs: PokemonIvs;
+  type: [PokemonTypes];
+  moveset: Moveset;
+};
 
 export class Pokemon extends Player {
-  #level?: number;
-  #stats?: Status;
-  #type?: PokemonTypes;
-  #movesAvailable?: MovesInfo[];
+  #scene: Phaser.Scene;
+  #level!: number;
+  #ivs!: PokemonIvs;
+  #type!: [PokemonTypes];
+  #moveset!: Moveset;
+  #projectiles: any;
 
-  constructor(params: PokemonParams) {
+  constructor(
+    pokemonParams: PokemonBaseParams,
+    playerParams: Omit<PlayerParams, "idleFrameConfig">
+  ) {
     super({
-      scene: params.scene,
-      gameObjectConfig: params.gameObjectConfig,
+      ...playerParams,
       idleFrameConfig: {
         [DirectionsEnum.DOWN]: 4,
         [DirectionsEnum.UP]: 0,
@@ -71,9 +51,17 @@ export class Pokemon extends Player {
       },
     });
 
-    this.#level = params.level;
-    this.#stats = params.status;
-    this.#type = params.type;
-    this.#movesAvailable = params.moves;
+    this.#scene = playerParams.scene;
+    this.#level = pokemonParams.level;
+    this.#ivs = pokemonParams.ivs;
+    this.#type = pokemonParams.type;
+    this.#moveset = pokemonParams.moveset;
+  }
+
+  primaryAttack() {
+    const attack = new this.#moveset.primary({
+      scene: this.#scene,
+      gameObject: this.gameObject,
+    });
   }
 }
