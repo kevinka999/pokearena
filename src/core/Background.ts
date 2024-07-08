@@ -1,3 +1,4 @@
+import { SpriteGameObject } from "../types/game";
 import { MapKeysEnums } from "../types/keys";
 
 export type BackgroundParams = {
@@ -34,11 +35,29 @@ export class Background {
     return background.displayHeight;
   }
 
-  addCollider(gameObject: any) {
+  addCollider(gameObject: SpriteGameObject) {
     this.#scene.physics.add.collider(
       gameObject,
       this.#layers[LayersEnum.COLLISION]
     );
+  }
+
+  turnOnDebugMode() {
+    const debugGraphics = this.#scene.add.graphics().setAlpha(0.75);
+    const collisionLayer = this.#layers[LayersEnum.COLLISION];
+    collisionLayer.renderDebug(debugGraphics, {
+      tileColor: null, // Color of non-colliding tiles
+      collidingTileColor: new Phaser.Display.Color(243, 134, 48, 255), // Color of colliding tiles
+      faceColor: new Phaser.Display.Color(40, 39, 37, 255), // Color of colliding face edges
+    });
+  }
+
+  setSpawnPoint(gameObject: SpriteGameObject) {
+    const spawnPoint = this.#tilemap.findObject(
+      "objects",
+      (obj) => obj.name === "spawn"
+    );
+    gameObject.setPosition(spawnPoint?.x, spawnPoint?.y);
   }
 
   #createLayers() {
@@ -48,7 +67,9 @@ export class Background {
 
     const tileset = this.#tilemap.addTilesetImage(
       "tileset",
-      MapKeysEnums.TILESET
+      MapKeysEnums.TILESET,
+      16,
+      16
     );
     if (!tileset) throw new Error("Tileset not loaded");
     this.#tileset = tileset;

@@ -10,3 +10,7 @@ export type GameObjectConfig = {
   assetFrame?: number;
   origin?: { x?: number; y?: number };
 } & GamePosition;
+
+export type SpriteGameObject =
+  | Phaser.GameObjects.Image
+  | Phaser.Types.Physics.Arcade.SpriteWithDynamicBody;

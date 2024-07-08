@@ -38,7 +38,9 @@ export class BattleScene extends Phaser.Scene {
       ],
     });
 
+    this.#background.setSpawnPoint(this.#pokemon.gameObject);
     this.#background.addCollider(this.#pokemon.gameObject);
+    this.#background.turnOnDebugMode();
   }
 
   update() {
