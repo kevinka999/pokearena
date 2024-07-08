@@ -24,11 +24,8 @@ export class PreloadScene extends Phaser.Scene {
   }
 
   preload() {
-    this.load.image(MapKeysEnums.BRIDGE_FULLMAP, "/map/map.png");
-    this.load.tilemapTiledJSON(
-      MapKeysEnums.BRIDGE_TILECONFIG,
-      "/map/config.json"
-    );
+    this.load.image(MapKeysEnums.TILESET, "/map/tileset.png");
+    this.load.tilemapTiledJSON(MapKeysEnums.MAPCONFIG, "/map/map_config.json");
 
     for (const assetKey in AssetsKeysEnums) {
       this.load.spritesheet(

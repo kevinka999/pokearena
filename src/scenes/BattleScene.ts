@@ -1,14 +1,11 @@
-import { BridgeBackground } from "../backgrounds/BridgeBackground";
-import { Camera } from "../classes/Camera";
-import { Controller } from "../classes/Controller";
-import { Pokemon } from "../classes/Pokemon";
+import { Background, Camera, Controller, Pokemon } from "../core";
 import { SceneKeysEnums, AssetsKeysEnums } from "../types/keys";
 
 export class BattleScene extends Phaser.Scene {
   #pokemon!: Pokemon;
   #controler!: Controller;
   #camera!: Camera;
-  #background!: BridgeBackground;
+  #background!: Background;
 
   constructor() {
     super({
@@ -19,7 +16,7 @@ export class BattleScene extends Phaser.Scene {
 
   create() {
     this.#controler = new Controller({ scene: this });
-    this.#background = new BridgeBackground({ scene: this });
+    this.#background = new Background({ scene: this });
     this.#pokemon = new Pokemon({
       scene: this,
       gameObjectConfig: {
@@ -41,12 +38,7 @@ export class BattleScene extends Phaser.Scene {
       ],
     });
 
-    this.physics.world.setBounds(
-      0,
-      0,
-      this.#background.displayWidth,
-      this.#background.displayHeight
-    );
+    this.#background.addCollider(this.#pokemon.gameObject);
   }
 
   update() {

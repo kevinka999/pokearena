@@ -42,10 +42,8 @@ export enum AssetsKeysEnums {
 }
 
 export enum MapKeysEnums {
-  BRIDGE_FULLMAP = "BRIDGE_FULLMAP",
-  BRIDGE_FOREGROUND = "BRIDGE_FOREGROUND",
-  BRIDGE_COLISION = "BRIDGE_COLISION",
-  BRIDGE_TILECONFIG = "BRIDGE_TILECONFIG",
+  TILESET = "TILESET",
+  MAPCONFIG = "MAPCONFIG",
 }
 
 export enum DataKeysEnums {

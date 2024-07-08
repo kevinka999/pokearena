@@ -1,4 +1,4 @@
-import { AssetsEnums } from "./keys";
+import { AssetsKeysEnums } from "./keys";
 
 export type GamePosition = {
   x: number;
@@ -6,7 +6,7 @@ export type GamePosition = {
 };
 
 export type GameObjectConfig = {
-  assetKey: AssetsEnums;
+  assetKey: AssetsKeysEnums;
   assetFrame?: number;
   origin?: { x?: number; y?: number };
 } & GamePosition;
