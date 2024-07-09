@@ -1,3 +1,4 @@
+import { GamePosition } from "../types/game";
 import { Attack, AttackBaseParams } from "./Attack";
 import { DirectionsEnum } from "./Controller";
 import { Player, PlayerParams } from "./Player";
@@ -58,10 +59,12 @@ export class Pokemon extends Player {
     this.#moveset = pokemonParams.moveset;
   }
 
-  primaryAttack() {
-    const attack = new this.#moveset.primary({
+  primaryAttack(position: GamePosition) {
+    new this.#moveset.primary({
       scene: this.#scene,
       gameObject: this.gameObject,
+      x: position.x,
+      y: position.y,
     });
   }
 }

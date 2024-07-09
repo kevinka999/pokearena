@@ -1,5 +1,6 @@
 import { GameObjectConfig } from "../types/game";
 import { AnimationKeysEnums } from "../types/keys";
+import { getPointerDirectionInRelationTo } from "../utils";
 import { DirectionsEnum } from "./Controller";
 
 type IdleFrameConfig = { [key in DirectionsEnum]: number };
@@ -29,7 +30,6 @@ export class Player {
     this.#scene = params.scene;
     this.#idleFrameConfig = params.idleFrameConfig;
     this.#assetKey = params.gameObjectConfig.assetKey;
-    console.log(params.gameObjectConfig.assetKey);
     this.#gameObject = this.#scene.physics.add
       .sprite(
         params.gameObjectConfig.x,
@@ -63,36 +63,12 @@ export class Player {
   ) {
     this.#handleMovement(moveDirections);
 
-    const lookDirection = this.#getLookDirection(pointer);
+    const lookDirection = getPointerDirectionInRelationTo(pointer, {
+      x: this.gameObject.x,
+      y: this.gameObject.y,
+    });
     const isMoving = moveDirections.length > 0;
     this.#handleAnimation(lookDirection, isMoving);
-  }
-
-  #getLookDirection(pointer: { x: number; y: number }) {
-    const pointerDirectionInGameObjectRelation = Math.trunc(
-      Math.atan2(pointer.y - this.#gameObject.y, pointer.x - this.#gameObject.x)
-    );
-
-    let direction: DirectionsEnum = DirectionsEnum.DOWN;
-    if (
-      Object.is(pointerDirectionInGameObjectRelation, -0) ||
-      pointerDirectionInGameObjectRelation === -2 ||
-      pointerDirectionInGameObjectRelation === -1
-    ) {
-      direction = DirectionsEnum.UP;
-    } else if (pointerDirectionInGameObjectRelation === 0) {
-      direction = DirectionsEnum.RIGHT;
-    } else if (pointerDirectionInGameObjectRelation === 1) {
-      direction = DirectionsEnum.DOWN;
-    } else if (
-      pointerDirectionInGameObjectRelation === -3 ||
-      pointerDirectionInGameObjectRelation === 2 ||
-      pointerDirectionInGameObjectRelation === 3
-    ) {
-      direction = DirectionsEnum.LEFT;
-    }
-
-    return direction;
   }
 
   #getAssetFromDirection(direction: DirectionsEnum) {

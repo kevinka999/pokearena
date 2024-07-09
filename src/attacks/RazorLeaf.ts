@@ -9,6 +9,8 @@ export class RazorLeaf extends Attack {
       damage: 200,
       spriteKey: AttacksKeysEnums.RAZOR_LEAF,
       type: AttackTypesEnum.MELEE,
+      x: params.x,
+      y: params.y,
     });
   }
 }

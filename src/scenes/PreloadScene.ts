@@ -25,7 +25,7 @@ export class PreloadScene extends Phaser.Scene {
   }
 
   preload() {
-    this.load.image(MapKeysEnums.TILESET, "/map/tileset.png");
+    this.load.image(MapKeysEnums.TILESET, "/map/tileset_extruded.png");
     this.load.tilemapTiledJSON(MapKeysEnums.MAPCONFIG, "/map/map_config.json");
 
     for (const pokemonKey in PokemonKeysEnums) {

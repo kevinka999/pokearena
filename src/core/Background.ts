@@ -68,8 +68,8 @@ export class Background {
     const tileset = this.#tilemap.addTilesetImage(
       "tileset",
       MapKeysEnums.TILESET,
-      16,
-      16
+      18,
+      18
     );
     if (!tileset) throw new Error("Tileset not loaded");
     this.#tileset = tileset;

@@ -8,6 +8,8 @@ export enum AttackTypesEnum {
 export type AttackBaseParams = {
   scene: Phaser.Scene;
   gameObject: SpriteGameObject;
+  x: number;
+  y: number;
 };
 
 type Params = {
@@ -18,10 +20,7 @@ type Params = {
 
 export class Attack extends Phaser.GameObjects.Sprite {
   constructor(params: Params) {
-    const x = params.gameObject.x;
-    const y = params.gameObject.y;
-
-    super(params.scene, x, y, params.spriteKey);
+    super(params.scene, params.x, params.y, params.spriteKey);
     params.scene.add.existing(this);
     params.scene.physics.world.enableBody(this);
 

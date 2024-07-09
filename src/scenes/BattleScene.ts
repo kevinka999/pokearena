@@ -1,10 +1,18 @@
-import { Background, Camera, Controller, Pokemon } from "../core";
+import {
+  Background,
+  Camera,
+  Controller,
+  DirectionsEnum,
+  Pokemon,
+} from "../core";
 import { Bayleef } from "../pokemons/Bayleef";
-import { SceneKeysEnums, PokemonKeysEnums } from "../types/keys";
+import { GamePosition } from "../types/game";
+import { SceneKeysEnums } from "../types/keys";
+import { getPointerDirectionInRelationTo } from "../utils";
 
 export class BattleScene extends Phaser.Scene {
   #pokemon!: Pokemon;
-  #controler!: Controller;
+  #controller!: Controller;
   #camera!: Camera;
   #background!: Background;
 
@@ -16,7 +24,7 @@ export class BattleScene extends Phaser.Scene {
   }
 
   create() {
-    this.#controler = new Controller({ scene: this });
+    this.#controller = new Controller({ scene: this });
     this.#background = new Background({ scene: this });
     this.#pokemon = new Bayleef({
       scene: this,
@@ -35,7 +43,9 @@ export class BattleScene extends Phaser.Scene {
 
     this.#background.setSpawnPoint(this.#pokemon.gameObject);
     this.#background.addCollider(this.#pokemon.gameObject);
-    this.#background.turnOnDebugMode();
+    // this.#background.turnOnDebugMode();
+
+    this.#handlePokemonAttack();
   }
 
   update() {
@@ -43,13 +53,53 @@ export class BattleScene extends Phaser.Scene {
       x: this.input.mousePointer.worldX,
       y: this.input.mousePointer.worldY,
     };
-    const movements = this.#controler.getMovement();
+    const movements = this.#controller.getMovement();
     this.#pokemon.movePlayer(movements, pointer);
     this.#camera.handleMovingFollowOffset(movements);
+  }
 
-    const attack = this.#controler.pressedPrimaryAttack();
-    if (attack) {
-      this.#pokemon.primaryAttack();
-    }
+  #handlePokemonAttack() {
+    this.input.on("pointerdown", (pointer: Phaser.Input.Pointer) => {
+      const lookDirection = getPointerDirectionInRelationTo(
+        {
+          x: pointer.worldX,
+          y: pointer.worldY,
+        },
+        {
+          x: this.#pokemon.gameObject.x,
+          y: this.#pokemon.gameObject.y,
+        }
+      );
+
+      let attackPosition: GamePosition;
+      switch (lookDirection) {
+        case DirectionsEnum.UP:
+          attackPosition = {
+            x: this.#pokemon.gameObject.x,
+            y: this.#pokemon.gameObject.y - 16,
+          };
+          break;
+        case DirectionsEnum.RIGHT:
+          attackPosition = {
+            x: this.#pokemon.gameObject.x + 16,
+            y: this.#pokemon.gameObject.y,
+          };
+          break;
+        case DirectionsEnum.LEFT:
+          attackPosition = {
+            x: this.#pokemon.gameObject.x - 16,
+            y: this.#pokemon.gameObject.y,
+          };
+          break;
+        case DirectionsEnum.DOWN:
+          attackPosition = {
+            x: this.#pokemon.gameObject.x,
+            y: this.#pokemon.gameObject.y + 16,
+          };
+          break;
+      }
+
+      this.#pokemon.primaryAttack(attackPosition);
+    });
   }
 }

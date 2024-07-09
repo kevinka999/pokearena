@@ -355,9 +355,9 @@
     {
       "columns": 8,
       "firstgid": 1,
-      "image": "tileset.png",
-      "imageheight": 26000,
-      "imagewidth": 128,
+      "image": "tileset_extruded.png",
+      "imageheight": 29250,
+      "imagewidth": 144,
       "margin": 0,
       "name": "tileset",
       "spacing": 0,
