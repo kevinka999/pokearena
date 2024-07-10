@@ -36,7 +36,7 @@ export class Pokemon extends Player {
   #ivs!: PokemonIvs;
   #type!: [PokemonTypes];
   #moveset!: Moveset;
-  #projectiles: any;
+  #attacks: Phaser.Physics.Arcade.StaticGroup;
 
   constructor(
     pokemonParams: PokemonBaseParams,
@@ -57,13 +57,22 @@ export class Pokemon extends Player {
     this.#ivs = pokemonParams.ivs;
     this.#type = pokemonParams.type;
     this.#moveset = pokemonParams.moveset;
+    this.#attacks = this.#scene.physics.add.staticGroup();
   }
 
-  primaryAttack(position: GamePosition) {
-    new this.#moveset.primary({
+  primaryAttack(
+    position: GamePosition,
+    callback?: (sprite: Phaser.Physics.Arcade.Sprite) => void
+  ) {
+    if (this.#attacks?.getLength() > 0) return;
+
+    const attack = new this.#moveset.primary({
       scene: this.#scene,
       x: position.x,
       y: position.y,
+      callback,
     });
+
+    this.#attacks.add(attack);
   }
 }

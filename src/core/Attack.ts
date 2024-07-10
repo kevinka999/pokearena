@@ -7,6 +7,7 @@ export type AttackBaseParams = {
   scene: Phaser.Scene;
   x: number;
   y: number;
+  callback?: (sprite: Phaser.Physics.Arcade.Sprite) => void;
 };
 
 type Params = {
@@ -15,7 +16,7 @@ type Params = {
   damage: number;
 } & AttackBaseParams;
 
-export class Attack extends Phaser.GameObjects.Sprite {
+export class Attack extends Phaser.Physics.Arcade.Sprite {
   constructor(params: Params) {
     super(params.scene, params.x, params.y, params.spriteKey);
     params.scene.add.existing(this);
@@ -24,8 +25,9 @@ export class Attack extends Phaser.GameObjects.Sprite {
     this.play(`${params.spriteKey}_ANIM`);
     this.on(
       "animationcomplete",
-      function (_anim: any, _frame: any, spriteContext: Attack) {
-        spriteContext.destroy();
+      function (_anim: any, _frame: any, sprite: Attack) {
+        if (params.callback) params.callback(sprite);
+        sprite?.destroy();
       },
       this
     );

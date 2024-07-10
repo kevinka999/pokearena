@@ -25,10 +25,12 @@ export class Player {
   #assetKey: string;
   #gameObject: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody;
   #idleFrameConfig: IdleFrameConfig;
+  #freeze!: boolean;
 
   constructor(params: PlayerParams) {
     this.#scene = params.scene;
     this.#idleFrameConfig = params.idleFrameConfig;
+    this.#freeze = false;
     this.#assetKey = params.gameObjectConfig.assetKey;
     this.#gameObject = this.#scene.physics.add
       .sprite(
@@ -54,6 +56,10 @@ export class Player {
 
   get gameObject() {
     return this.#gameObject;
+  }
+
+  set setFreeze(value: boolean) {
+    this.#freeze = value;
   }
 
   movePlayer(
@@ -86,7 +92,7 @@ export class Player {
   }
 
   #handleMovement(directions: DirectionsEnum[]) {
-    if (directions.length === 0) {
+    if (this.#freeze || directions.length === 0) {
       this.#gameObject.body.setVelocity(0);
       return;
     }

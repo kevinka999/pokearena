@@ -61,6 +61,7 @@ export class BattleScene extends Phaser.Scene {
 
   #handlePokemonAttack() {
     this.input.on("pointerdown", (pointer: Phaser.Input.Pointer) => {
+      this.#pokemon.setFreeze = true;
       const lookDirection = getPointerDirectionInRelationTo(
         {
           x: pointer.worldX,
@@ -77,30 +78,34 @@ export class BattleScene extends Phaser.Scene {
         case DirectionsEnum.UP:
           attackPosition = {
             x: this.#pokemon.gameObject.x,
-            y: this.#pokemon.gameObject.y - 16,
+            y:
+              this.#pokemon.gameObject.y - this.#pokemon.gameObject.body.height,
           };
           break;
         case DirectionsEnum.RIGHT:
           attackPosition = {
-            x: this.#pokemon.gameObject.x + 16,
+            x: this.#pokemon.gameObject.x + this.#pokemon.gameObject.body.width,
             y: this.#pokemon.gameObject.y,
           };
           break;
         case DirectionsEnum.LEFT:
           attackPosition = {
-            x: this.#pokemon.gameObject.x - 16,
+            x: this.#pokemon.gameObject.x - this.#pokemon.gameObject.body.width,
             y: this.#pokemon.gameObject.y,
           };
           break;
         case DirectionsEnum.DOWN:
           attackPosition = {
             x: this.#pokemon.gameObject.x,
-            y: this.#pokemon.gameObject.y + 16,
+            y:
+              this.#pokemon.gameObject.y + this.#pokemon.gameObject.body.height,
           };
           break;
       }
 
-      this.#pokemon.primaryAttack(attackPosition);
+      this.#pokemon.primaryAttack(attackPosition, (_sprite) => {
+        this.#pokemon.setFreeze = false;
+      });
     });
   }
 }

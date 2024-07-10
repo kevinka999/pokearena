@@ -10,6 +10,7 @@ export class RazorLeaf extends Attack {
       type: AttackTypesEnum.MELEE,
       x: params.x,
       y: params.y,
+      callback: params.callback,
     });
   }
 }
