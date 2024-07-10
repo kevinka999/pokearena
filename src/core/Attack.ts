@@ -1,5 +1,3 @@
-import { SpriteGameObject } from "../types/game";
-
 export enum AttackTypesEnum {
   MELEE = "MELEE",
   RANGED = "RANGED",
@@ -7,7 +5,6 @@ export enum AttackTypesEnum {
 
 export type AttackBaseParams = {
   scene: Phaser.Scene;
-  gameObject: SpriteGameObject;
   x: number;
   y: number;
 };

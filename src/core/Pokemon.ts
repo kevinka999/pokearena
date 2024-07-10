@@ -62,7 +62,6 @@ export class Pokemon extends Player {
   primaryAttack(position: GamePosition) {
     new this.#moveset.primary({
       scene: this.#scene,
-      gameObject: this.gameObject,
       x: position.x,
       y: position.y,
     });

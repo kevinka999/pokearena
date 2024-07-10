@@ -1,3 +1,4 @@
+import { RazorLeaf } from "../attacks/RazorLeaf";
 import {
   Background,
   Camera,
@@ -43,7 +44,7 @@ export class BattleScene extends Phaser.Scene {
 
     this.#background.setSpawnPoint(this.#pokemon.gameObject);
     this.#background.addCollider(this.#pokemon.gameObject);
-    // this.#background.turnOnDebugMode();
+    this.#background.turnOnDebugMode();
 
     this.#handlePokemonAttack();
   }

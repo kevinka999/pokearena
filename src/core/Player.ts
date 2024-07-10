@@ -41,7 +41,6 @@ export class Player {
       )
       .setOrigin(0);
     this.#gameObject.setSize(16, 24);
-    this.#gameObject.setOffset(8, 8);
     this.#scene.physics.add.existing(this.gameObject, false);
     this.#gameObject.body.setCollideWorldBounds(true);
 
