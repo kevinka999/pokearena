@@ -41,4 +41,20 @@ export class Controller {
 
     return keysPressed;
   }
+
+  listenEventKeyboardDown(
+    keyboardEvent: ControllerKeysEnum | ControllerKeysEnum[],
+    callback: (e: Phaser.Input.Keyboard.Key) => void
+  ) {
+    if (Array.isArray(keyboardEvent)) {
+      keyboardEvent.forEach((keyEvent) => {
+        const key = this.#controller[keyEvent];
+        key.on("down", callback);
+      });
+      return;
+    }
+
+    const key = this.#controller[keyboardEvent];
+    key.on("down", callback);
+  }
 }
