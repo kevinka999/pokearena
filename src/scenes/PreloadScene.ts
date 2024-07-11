@@ -20,7 +20,6 @@ export class PreloadScene extends Phaser.Scene {
   constructor() {
     super({
       key: SceneKeysEnums.PRELOAD,
-      active: true,
     });
   }
 
@@ -31,7 +30,7 @@ export class PreloadScene extends Phaser.Scene {
     for (const pokemonKey in PokemonKeysEnums) {
       this.load.spritesheet(
         pokemonKey.toUpperCase(),
-        `/assets/pokemon/${pokemonKey.toLowerCase()}.png`,
+        `/assets/pokemon/walking/${pokemonKey.toLowerCase()}.png`,
         {
           frameWidth: 32,
           frameHeight: 32,

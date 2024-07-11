@@ -1,5 +1,5 @@
 import Phaser from "phaser";
-import { PreloadScene, BattleScene } from "./scenes";
+import { PreloadScene, BattleScene, SelectionScene } from "./scenes";
 
 const game = new Phaser.Game({
   type: Phaser.CANVAS,
@@ -18,5 +18,5 @@ const game = new Phaser.Game({
     },
   },
   backgroundColor: "#000000",
-  scene: [PreloadScene, BattleScene],
+  scene: [SelectionScene, PreloadScene, BattleScene],
 });

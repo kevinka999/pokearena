@@ -57,6 +57,7 @@ export enum DataKeysEnums {
 export enum SceneKeysEnums {
   PRELOAD = "PRELOAD_SCENE",
   BATTLE = "BATTLE_SCENE",
+  SELECTION = "SELECTION_SCENE",
 }
 
 export enum AnimationKeysEnums {
