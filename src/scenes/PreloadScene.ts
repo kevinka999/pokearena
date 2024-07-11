@@ -20,6 +20,7 @@ export class PreloadScene extends Phaser.Scene {
   constructor() {
     super({
       key: SceneKeysEnums.PRELOAD,
+      active: false,
     });
   }
 

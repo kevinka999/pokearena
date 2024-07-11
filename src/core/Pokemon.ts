@@ -1,6 +1,6 @@
 import { GamePosition } from "../types/game";
 import { Attack, AttackBaseParams } from "./Attack";
-import { DirectionsEnum } from "./Controller";
+import { ControllerKeysEnum } from "./Controller";
 import { Player, PlayerParams } from "./Player";
 
 export enum PokemonTypes {
@@ -45,10 +45,10 @@ export class Pokemon extends Player {
     super({
       ...playerParams,
       idleFrameConfig: {
-        [DirectionsEnum.DOWN]: 4,
-        [DirectionsEnum.UP]: 0,
-        [DirectionsEnum.LEFT]: 1,
-        [DirectionsEnum.RIGHT]: 5,
+        [ControllerKeysEnum.S]: 4,
+        [ControllerKeysEnum.W]: 0,
+        [ControllerKeysEnum.A]: 1,
+        [ControllerKeysEnum.D]: 5,
       },
     });
 

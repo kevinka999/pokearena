@@ -1,5 +1,5 @@
 import { Tweens } from "phaser";
-import { DirectionsEnum } from "./Controller";
+import { ControllerKeysEnum } from "./Controller";
 
 type Bounds = Parameters<Phaser.Cameras.Scene2D.BaseCamera["setBounds"]>;
 
@@ -32,7 +32,7 @@ export class Camera {
     return this.#scene.cameras;
   }
 
-  handleMovingFollowOffset(movingDirection: DirectionsEnum[]) {
+  handleMovingFollowOffset(movingDirection: ControllerKeysEnum[]) {
     const offsetToGo = this.#getOffsetPositionFromDirections(movingDirection);
 
     if (
@@ -65,19 +65,19 @@ export class Camera {
     });
   }
 
-  #getOffsetPositionFromDirections(movingDirection: DirectionsEnum[]) {
+  #getOffsetPositionFromDirections(movingDirection: ControllerKeysEnum[]) {
     let offsetToGo: FollowOffset = { x: 0, y: 0 };
     if (movingDirection.length === 0) return offsetToGo;
 
-    if (movingDirection.includes(DirectionsEnum.LEFT)) {
+    if (movingDirection.includes(ControllerKeysEnum.A)) {
       offsetToGo.x = this.#offsetDistancePx;
-    } else if (movingDirection.includes(DirectionsEnum.RIGHT)) {
+    } else if (movingDirection.includes(ControllerKeysEnum.D)) {
       offsetToGo.x = -this.#offsetDistancePx;
     }
 
-    if (movingDirection.includes(DirectionsEnum.UP)) {
+    if (movingDirection.includes(ControllerKeysEnum.W)) {
       offsetToGo.y = this.#offsetDistancePx;
-    } else if (movingDirection.includes(DirectionsEnum.DOWN)) {
+    } else if (movingDirection.includes(ControllerKeysEnum.S)) {
       offsetToGo.y = -this.#offsetDistancePx;
     }
 

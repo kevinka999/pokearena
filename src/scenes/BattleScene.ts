@@ -1,15 +1,14 @@
-import { RazorLeaf } from "../attacks/RazorLeaf";
 import {
   Background,
   Camera,
   Controller,
-  DirectionsEnum,
+  ControllerKeysEnum,
   Pokemon,
 } from "../core";
+import { Utils } from "../core/Utils";
 import { Bayleef } from "../pokemons/Bayleef";
 import { GamePosition } from "../types/game";
 import { SceneKeysEnums } from "../types/keys";
-import { getPointerDirectionInRelationTo } from "../utils";
 
 export class BattleScene extends Phaser.Scene {
   #pokemon!: Pokemon;
@@ -54,15 +53,15 @@ export class BattleScene extends Phaser.Scene {
       x: this.input.mousePointer.worldX,
       y: this.input.mousePointer.worldY,
     };
-    const movements = this.#controller.getMovement();
-    this.#pokemon.movePlayer(movements, pointer);
-    this.#camera.handleMovingFollowOffset(movements);
+    const keysPressed = this.#controller.getKeysPressed();
+    this.#pokemon.movePlayer(keysPressed, pointer);
+    this.#camera.handleMovingFollowOffset(keysPressed);
   }
 
   #handlePokemonAttack() {
     this.input.on("pointerdown", (pointer: Phaser.Input.Pointer) => {
       this.#pokemon.setFreeze = true;
-      const lookDirection = getPointerDirectionInRelationTo(
+      const lookDirection = Utils.getPointerDirectionInRelationTo(
         {
           x: pointer.worldX,
           y: pointer.worldY,
@@ -75,26 +74,26 @@ export class BattleScene extends Phaser.Scene {
 
       let attackPosition: GamePosition;
       switch (lookDirection) {
-        case DirectionsEnum.UP:
+        case ControllerKeysEnum.W:
           attackPosition = {
             x: this.#pokemon.gameObject.x,
             y:
               this.#pokemon.gameObject.y - this.#pokemon.gameObject.body.height,
           };
           break;
-        case DirectionsEnum.RIGHT:
+        case ControllerKeysEnum.D:
           attackPosition = {
             x: this.#pokemon.gameObject.x + this.#pokemon.gameObject.body.width,
             y: this.#pokemon.gameObject.y,
           };
           break;
-        case DirectionsEnum.LEFT:
+        case ControllerKeysEnum.A:
           attackPosition = {
             x: this.#pokemon.gameObject.x - this.#pokemon.gameObject.body.width,
             y: this.#pokemon.gameObject.y,
           };
           break;
-        case DirectionsEnum.DOWN:
+        case ControllerKeysEnum.S:
           attackPosition = {
             x: this.#pokemon.gameObject.x,
             y:
