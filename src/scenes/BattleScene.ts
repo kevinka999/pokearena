@@ -6,7 +6,7 @@ import {
   Pokemon,
 } from "../core";
 import { Utils } from "../core/Utils";
-import { Bayleef } from "../pokemons/Bayleef";
+import { Bayleef } from "../pokemons/Bulbasaur";
 import { GamePosition } from "../types/game";
 import { SceneKeysEnums } from "../types/keys";
 

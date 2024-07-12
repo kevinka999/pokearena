@@ -2,14 +2,14 @@ import { RazorLeaf } from "../attacks/RazorLeaf";
 import { Pokemon, PokemonIvs, PokemonTypes } from "../core";
 import { PokemonKeysEnums } from "../types/keys";
 
-type BayleefParams = {
+type Params = {
   scene: Phaser.Scene;
   level: number;
   ivs?: PokemonIvs;
 };
 
-export class Bayleef extends Pokemon {
-  constructor({ scene, ...pokemon }: BayleefParams) {
+export class Turtwig extends Pokemon {
+  constructor({ scene, ...pokemon }: Params) {
     super(
       {
         ...pokemon,
@@ -17,13 +17,13 @@ export class Bayleef extends Pokemon {
           primary: RazorLeaf,
           secondary: RazorLeaf,
         },
-        ivs: {
-          HP: 255,
-          ATTACK: 255,
-          DEFENSE: 255,
-          SP_ATTACK: 255,
-          SP_DEFENSE: 255,
-          SPEED: 255,
+        baseStatus: {
+          HP: 55,
+          ATTACK: 68,
+          DEFENSE: 64,
+          SP_ATTACK: 45,
+          SP_DEFENSE: 55,
+          SPEED: 31,
         },
         type: [PokemonTypes.GRASS],
       },
@@ -32,7 +32,7 @@ export class Bayleef extends Pokemon {
         gameObjectConfig: {
           x: 0,
           y: 0,
-          assetKey: PokemonKeysEnums.BAYLEEF,
+          assetKey: PokemonKeysEnums.TURTWIG,
           assetFrame: 7,
           origin: { x: 0.5, y: 0.5 },
         },

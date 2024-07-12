@@ -25,7 +25,7 @@ type Moveset = {
 
 export type PokemonBaseParams = {
   level: number;
-  ivs: PokemonIvs;
+  baseStatus: PokemonIvs;
   type: [PokemonTypes];
   moveset: Moveset;
 };
@@ -33,7 +33,7 @@ export type PokemonBaseParams = {
 export class Pokemon extends Player {
   #scene: Phaser.Scene;
   #level!: number;
-  #ivs!: PokemonIvs;
+  #baseStatus!: PokemonIvs;
   #type!: [PokemonTypes];
   #moveset!: Moveset;
   #attacks: Phaser.Physics.Arcade.StaticGroup;
@@ -54,7 +54,7 @@ export class Pokemon extends Player {
 
     this.#scene = playerParams.scene;
     this.#level = pokemonParams.level;
-    this.#ivs = pokemonParams.ivs;
+    this.#baseStatus = pokemonParams.baseStatus;
     this.#type = pokemonParams.type;
     this.#moveset = pokemonParams.moveset;
     this.#attacks = this.#scene.physics.add.staticGroup();
