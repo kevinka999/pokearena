@@ -60,7 +60,7 @@ export class Player {
     return this.#gameObject;
   }
 
-  set setFreeze(value: boolean) {
+  set freeze(value: boolean) {
     this.#freeze = value;
   }
 

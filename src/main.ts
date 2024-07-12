@@ -1,5 +1,12 @@
 import Phaser from "phaser";
 import { PreloadScene, BattleScene, SelectionScene } from "./scenes";
+import { GlobalPlugin } from "./plugin/GlobalPlugin";
+
+declare module "phaser" {
+  interface Scene {
+    global: GlobalPlugin;
+  }
+}
 
 const game = new Phaser.Game({
   type: Phaser.CANVAS,
@@ -18,5 +25,15 @@ const game = new Phaser.Game({
     },
   },
   backgroundColor: "#000000",
+  plugins: {
+    global: [
+      {
+        key: "GlobalPlugin",
+        plugin: GlobalPlugin,
+        start: true,
+        mapping: "global",
+      },
+    ],
+  },
   scene: [SelectionScene, PreloadScene, BattleScene],
 });

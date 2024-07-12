@@ -76,6 +76,7 @@ export class SelectionScene extends Phaser.Scene {
     this.#createAnimations(animations);
     this.#renderAllPokemonOptions(animations);
     this.#handleChangeSelection();
+    this.#handleSelectCharacter();
   }
 
   update() {
@@ -92,17 +93,6 @@ export class SelectionScene extends Phaser.Scene {
 
   #createAnimations(animations: AnimationConfig[]) {
     animations.forEach((animation) => {
-      console.log(
-        this.anims.generateFrameNames(
-          `${animation.key.toUpperCase()}_SELECTION`,
-          {
-            zeroPad: 4,
-            suffix: ".png",
-            start: animation.start,
-            end: animation.end,
-          }
-        )
-      );
       this.anims.create({
         key: `${animation.key.toUpperCase()}_SELECTION_ANIM`,
         frames: this.anims.generateFrameNames(
@@ -303,6 +293,19 @@ export class SelectionScene extends Phaser.Scene {
 
         this.#previousIndex = this.#selectedIndex;
         this.#selectedIndex = nextCharacter;
+      }
+    );
+  }
+
+  #handleSelectCharacter() {
+    this.#controller.listenEventKeyboardDown(
+      ControllerKeysEnum.SPACE,
+      (e: Phaser.Input.Keyboard.Key) => {
+        const selectCharacter = this.#characters.get(this.#selectedIndex);
+        if (selectCharacter !== undefined && selectCharacter.isSelected) {
+          this.global.selectCharacter = selectCharacter.pokemonKey;
+          this.scene.switch(SceneKeysEnums.PRELOAD);
+        }
       }
     );
   }

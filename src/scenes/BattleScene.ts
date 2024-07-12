@@ -6,7 +6,7 @@ import {
   Pokemon,
 } from "../core";
 import { Utils } from "../core/Utils";
-import { Bayleef } from "../pokemons/Bulbasaur";
+import { Bulbasaur } from "../pokemons/Bulbasaur";
 import { GamePosition } from "../types/game";
 import { SceneKeysEnums } from "../types/keys";
 
@@ -26,7 +26,8 @@ export class BattleScene extends Phaser.Scene {
   create() {
     this.#controller = new Controller({ scene: this });
     this.#background = new Background({ scene: this });
-    this.#pokemon = new Bayleef({
+    const pokemon = this.global.getSelectedPokemonClass();
+    this.#pokemon = new pokemon({
       scene: this,
       level: 100,
     });
@@ -60,7 +61,7 @@ export class BattleScene extends Phaser.Scene {
 
   #handlePokemonAttack() {
     this.input.on("pointerdown", (pointer: Phaser.Input.Pointer) => {
-      this.#pokemon.setFreeze = true;
+      this.#pokemon.freeze = true;
       const lookDirection = Utils.getPointerDirectionInRelationTo(
         {
           x: pointer.worldX,
@@ -103,7 +104,7 @@ export class BattleScene extends Phaser.Scene {
       }
 
       this.#pokemon.primaryAttack(attackPosition, (_sprite) => {
-        this.#pokemon.setFreeze = false;
+        this.#pokemon.freeze = false;
       });
     });
   }

@@ -64,7 +64,7 @@ export class PreloadScene extends Phaser.Scene {
     });
 
     this.#createAnimations();
-    this.scene.start(SceneKeysEnums.BATTLE);
+    this.scene.switch(SceneKeysEnums.BATTLE);
   }
 
   #createAnimations() {
