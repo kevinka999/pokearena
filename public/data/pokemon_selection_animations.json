@@ -3,72 +3,108 @@
     "key": "bulbasaur",
     "start": 1,
     "end": 102,
-    "frameRate": 12
+    "frameRate": 12,
+    "originX": 0.4,
+    "originY": 0.5,
+    "scale": 2
   },
   {
     "key": "charmander",
     "start": 1,
     "end": 108,
-    "frameRate": 12
+    "frameRate": 12,
+    "originX": 0.4,
+    "originY": 0.3,
+    "scale": 2
   },
   {
     "key": "squirtle",
     "start": 1,
     "end": 77,
-    "frameRate": 12
+    "frameRate": 12,
+    "originX": 0.4,
+    "originY": 0.4,
+    "scale": 2
   },
   {
     "key": "chikorita",
     "start": 1,
     "end": 70,
-    "frameRate": 12
+    "frameRate": 12,
+    "originX": 0.3,
+    "originY": 0.6,
+    "scale": 2
   },
   {
     "key": "cyndaquil",
     "start": 1,
     "end": 128,
-    "frameRate": 12
+    "frameRate": 12,
+    "originX": 0.4,
+    "originY": 0.5,
+    "scale": 2
   },
   {
     "key": "totodile",
     "start": 1,
     "end": 108,
-    "frameRate": 12
+    "frameRate": 12,
+    "originX": 0.5,
+    "originY": 0.6,
+    "scale": 2
   },
   {
     "key": "treecko",
     "start": 1,
     "end": 158,
-    "frameRate": 12
+    "frameRate": 12,
+    "originX": 0.4,
+    "originY": 0.4,
+    "scale": 2
   },
   {
     "key": "torchic",
     "start": 1,
     "end": 171,
-    "frameRate": 12
+    "frameRate": 12,
+    "originX": 0.4,
+    "originY": 0.5,
+    "scale": 2.2
   },
   {
     "key": "mudkip",
     "start": 1,
     "end": 168,
-    "frameRate": 12
+    "frameRate": 12,
+    "originX": 0.4,
+    "originY": 0.6,
+    "scale": 2
   },
   {
     "key": "turtwig",
     "start": 1,
     "end": 88,
-    "frameRate": 12
+    "frameRate": 12,
+    "originX": 0.5,
+    "originY": 0.5,
+    "scale": 1.8
   },
   {
     "key": "chimchar",
     "start": 1,
     "end": 140,
-    "frameRate": 12
+    "frameRate": 12,
+    "originX": 0.4,
+    "originY": 0.6,
+    "scale": 2
   },
   {
     "key": "piplup",
     "start": 1,
     "end": 150,
-    "frameRate": 12
+    "frameRate": 12,
+    "originX": 0.5,
+    "originY": 0.5,
+    "scale": 2.2
   }
 ]

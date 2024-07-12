@@ -92,6 +92,17 @@ export class SelectionScene extends Phaser.Scene {
 
   #createAnimations(animations: AnimationConfig[]) {
     animations.forEach((animation) => {
+      console.log(
+        this.anims.generateFrameNames(
+          `${animation.key.toUpperCase()}_SELECTION`,
+          {
+            zeroPad: 4,
+            suffix: ".png",
+            start: animation.start,
+            end: animation.end,
+          }
+        )
+      );
       this.anims.create({
         key: `${animation.key.toUpperCase()}_SELECTION_ANIM`,
         frames: this.anims.generateFrameNames(
@@ -128,8 +139,9 @@ export class SelectionScene extends Phaser.Scene {
     let rowsRendered = 1;
     options.forEach((pokemonKey, idx) => {
       const animationData = animations.find(
-        (animation) => animation.key === pokemonKey
+        (animation) => animation.key === pokemonKey.toLowerCase()
       );
+
       this.#addPokemonContainer(
         idx,
         {
@@ -138,9 +150,9 @@ export class SelectionScene extends Phaser.Scene {
         },
         {
           key: pokemonKey,
-          originX: animationData?.originX ?? 0.5,
-          originY: animationData?.originY ?? 0.5,
-          scale: animationData?.scale ?? 2,
+          originX: animationData?.originX,
+          originY: animationData?.originY,
+          scale: animationData?.scale,
         }
       );
 
@@ -159,9 +171,9 @@ export class SelectionScene extends Phaser.Scene {
     position: GamePosition,
     pokemon: {
       key: PokemonKeysEnums;
-      originX: number;
-      originY: number;
-      scale: number;
+      originX?: number;
+      originY?: number;
+      scale?: number;
     }
   ) {
     const frame = new Phaser.GameObjects.Rectangle(
@@ -177,10 +189,11 @@ export class SelectionScene extends Phaser.Scene {
       this,
       frame.width / 2,
       frame.height / 2,
-      `${pokemon.key.toUpperCase()}_SELECTION`
+      `${pokemon.key.toUpperCase()}_SELECTION`,
+      "0001.png"
     )
-      .setScale(pokemon.scale)
-      .setOrigin(pokemon.originX, pokemon.originY);
+      .setScale(pokemon.scale ?? 2)
+      .setOrigin(pokemon.originX ?? 0.5, pokemon.originY ?? 0.5);
 
     const maskGraphics = this.make.graphics();
     maskGraphics.fillRect(
@@ -223,7 +236,7 @@ export class SelectionScene extends Phaser.Scene {
   #deselectCharacter(index: number, character: CharacterSelection) {
     const sprite = character.container.getAt(1) as Phaser.GameObjects.Sprite;
     sprite.anims.stop();
-    sprite.setFrame(0);
+    sprite.setFrame("0001.png");
 
     const overlay = this.add.graphics();
     overlay
