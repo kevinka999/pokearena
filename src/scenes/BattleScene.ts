@@ -6,7 +6,6 @@ import {
   Pokemon,
 } from "../core";
 import { Utils } from "../core/Utils";
-import { Bulbasaur } from "../pokemons/Bulbasaur";
 import { GamePosition } from "../types/game";
 import { SceneKeysEnums } from "../types/keys";
 
@@ -24,13 +23,14 @@ export class BattleScene extends Phaser.Scene {
   }
 
   create() {
-    this.#controller = new Controller({ scene: this });
-    this.#background = new Background({ scene: this });
-    const pokemon = this.global.getSelectedPokemonClass();
-    this.#pokemon = new pokemon({
+    const PlayerPokemon = this.global.getSelectedPokemonClass();
+    this.#pokemon = new PlayerPokemon({
       scene: this,
       level: 100,
     });
+
+    this.#controller = new Controller({ scene: this });
+    this.#background = new Background({ scene: this });
     this.#camera = new Camera({
       scene: this,
       followObject: this.#pokemon.gameObject,

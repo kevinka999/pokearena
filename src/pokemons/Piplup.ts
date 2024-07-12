@@ -1,15 +1,10 @@
 import { RazorLeaf } from "../attacks/RazorLeaf";
-import { Pokemon, PokemonIvs, PokemonTypes } from "../core";
+import { Pokemon, PokemonTypes } from "../core";
+import { PlayerPokemonParams } from "../types/game";
 import { PokemonKeysEnums } from "../types/keys";
 
-type Params = {
-  scene: Phaser.Scene;
-  level: number;
-  ivs?: PokemonIvs;
-};
-
 export class Piplup extends Pokemon {
-  constructor({ scene, ...pokemon }: Params) {
+  constructor({ scene, ...pokemon }: PlayerPokemonParams) {
     super(
       {
         ...pokemon,

@@ -13,6 +13,7 @@ import {
   Chimchar,
   Piplup,
 } from "../pokemons";
+import { IPlayerPokemon } from "../types/game";
 import { PokemonKeysEnums } from "../types/keys";
 
 const classMap: { [key in PokemonKeysEnums]?: any } = {
@@ -45,7 +46,7 @@ export class GlobalPlugin extends Phaser.Plugins.BasePlugin {
     this.#selectCharacter = character;
   }
 
-  getSelectedPokemonClass(): any {
+  getSelectedPokemonClass(): IPlayerPokemon {
     if (!this.#selectCharacter) throw new Error("Pokemon not selected");
     const intanceOfPokemon = classMap[this.#selectCharacter];
     if (!intanceOfPokemon) throw new Error("Instance not found");
