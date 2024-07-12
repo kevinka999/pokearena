@@ -1,0 +1,74 @@
+[
+  {
+    "key": "bulbasaur",
+    "start": 1,
+    "end": 102,
+    "frameRate": 12
+  },
+  {
+    "key": "charmander",
+    "start": 1,
+    "end": 108,
+    "frameRate": 12
+  },
+  {
+    "key": "squirtle",
+    "start": 1,
+    "end": 77,
+    "frameRate": 12
+  },
+  {
+    "key": "chikorita",
+    "start": 1,
+    "end": 70,
+    "frameRate": 12
+  },
+  {
+    "key": "cyndaquil",
+    "start": 1,
+    "end": 128,
+    "frameRate": 12
+  },
+  {
+    "key": "totodile",
+    "start": 1,
+    "end": 108,
+    "frameRate": 12
+  },
+  {
+    "key": "treecko",
+    "start": 1,
+    "end": 158,
+    "frameRate": 12
+  },
+  {
+    "key": "torchic",
+    "start": 1,
+    "end": 171,
+    "frameRate": 12
+  },
+  {
+    "key": "mudkip",
+    "start": 1,
+    "end": 168,
+    "frameRate": 12
+  },
+  {
+    "key": "turtwig",
+    "start": 1,
+    "end": 88,
+    "frameRate": 12
+  },
+  {
+    "key": "chimchar",
+    "start": 1,
+    "end": 140,
+    "frameRate": 12
+  },
+  {
+    "key": "piplup",
+    "start": 1,
+    "end": 150,
+    "frameRate": 12
+  }
+]

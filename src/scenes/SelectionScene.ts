@@ -1,6 +1,16 @@
 import { Controller, ControllerKeysEnum } from "../core";
 import { GamePosition } from "../types/game";
-import { PokemonKeysEnums, SceneKeysEnums } from "../types/keys";
+import { DataKeysEnums, PokemonKeysEnums, SceneKeysEnums } from "../types/keys";
+
+type AnimationConfig = {
+  key: PokemonKeysEnums;
+  start: number;
+  end: number;
+  frameRate: number;
+  originX?: number;
+  originY?: number;
+  scale?: number;
+};
 
 const options: PokemonKeysEnums[] = [
   PokemonKeysEnums.BULBASAUR,
@@ -42,28 +52,29 @@ export class SelectionScene extends Phaser.Scene {
   }
 
   preload() {
-    this.load.spritesheet(
-      `${PokemonKeysEnums.BULBASAUR}_SELECTION`,
-      `/assets/pokemon/selection/${PokemonKeysEnums.BULBASAUR.toLowerCase()}.png`,
-      {
-        frameWidth: 36,
-        frameHeight: 36,
-      }
+    options.forEach((pokemonKey) => {
+      this.load.atlas(
+        `${pokemonKey.toUpperCase()}_SELECTION`,
+        `/assets/pokemon/selection/${pokemonKey.toLowerCase()}.png`,
+        `/assets/pokemon/selection/${pokemonKey.toLowerCase()}.json`
+      );
+    });
+
+    this.load.json(
+      DataKeysEnums.POKEMON_SELECTION_ANIMATIONS,
+      "/data/pokemon_selection_animations.json"
     );
   }
 
   create() {
     this.#controller = new Controller({ scene: this });
-    this.anims.create({
-      key: `${PokemonKeysEnums.BULBASAUR}_SELECTION_ANIM`,
-      frames: this.anims.generateFrameNumbers(
-        `${PokemonKeysEnums.BULBASAUR}_SELECTION`
-      ),
-      repeat: -1,
-      frameRate: 10,
-    });
 
-    this.#renderAllPokemonOptions();
+    const animations: AnimationConfig[] = this.cache.json.get(
+      DataKeysEnums.POKEMON_SELECTION_ANIMATIONS
+    );
+
+    this.#createAnimations(animations);
+    this.#renderAllPokemonOptions(animations);
     this.#handleChangeSelection();
   }
 
@@ -79,7 +90,26 @@ export class SelectionScene extends Phaser.Scene {
     }
   }
 
-  #renderAllPokemonOptions() {
+  #createAnimations(animations: AnimationConfig[]) {
+    animations.forEach((animation) => {
+      this.anims.create({
+        key: `${animation.key.toUpperCase()}_SELECTION_ANIM`,
+        frames: this.anims.generateFrameNames(
+          `${animation.key.toUpperCase()}_SELECTION`,
+          {
+            zeroPad: 4,
+            suffix: ".png",
+            start: animation.start,
+            end: animation.end,
+          }
+        ),
+        frameRate: animation.frameRate,
+        repeat: -1,
+      });
+    });
+  }
+
+  #renderAllPokemonOptions(animations: AnimationConfig[]) {
     const margin = 10;
     const qtyOptionsPerRow = Math.floor(options.length / this.#rows);
 
@@ -97,7 +127,22 @@ export class SelectionScene extends Phaser.Scene {
     let y = margin;
     let rowsRendered = 1;
     options.forEach((pokemonKey, idx) => {
-      this.#addPokemonContainer({ x, y }, pokemonKey, idx);
+      const animationData = animations.find(
+        (animation) => animation.key === pokemonKey
+      );
+      this.#addPokemonContainer(
+        idx,
+        {
+          x,
+          y,
+        },
+        {
+          key: pokemonKey,
+          originX: animationData?.originX ?? 0.5,
+          originY: animationData?.originY ?? 0.5,
+          scale: animationData?.scale ?? 2,
+        }
+      );
 
       if ((idx + 1) / rowsRendered === qtyOptionsPerRow) {
         rowsRendered++;
@@ -110,9 +155,14 @@ export class SelectionScene extends Phaser.Scene {
   }
 
   #addPokemonContainer(
+    index: number,
     position: GamePosition,
-    key: PokemonKeysEnums,
-    index: number
+    pokemon: {
+      key: PokemonKeysEnums;
+      originX: number;
+      originY: number;
+      scale: number;
+    }
   ) {
     const frame = new Phaser.GameObjects.Rectangle(
       this,
@@ -127,10 +177,10 @@ export class SelectionScene extends Phaser.Scene {
       this,
       frame.width / 2,
       frame.height / 2,
-      `${PokemonKeysEnums.BULBASAUR}_SELECTION`
+      `${pokemon.key.toUpperCase()}_SELECTION`
     )
-      .setOrigin(0.5)
-      .setScale(2);
+      .setScale(pokemon.scale)
+      .setOrigin(pokemon.originX, pokemon.originY);
 
     const maskGraphics = this.make.graphics();
     maskGraphics.fillRect(
@@ -153,14 +203,14 @@ export class SelectionScene extends Phaser.Scene {
         sprite,
         overlay,
       ]),
-      pokemonKey: key,
+      pokemonKey: pokemon.key,
       isSelected: false,
     });
   }
 
   #selectCharacter(index: number, character: CharacterSelection) {
     const sprite = character.container.getAt(1) as Phaser.GameObjects.Sprite;
-    sprite.play(`${PokemonKeysEnums.BULBASAUR}_SELECTION_ANIM`);
+    sprite.play(`${character.pokemonKey.toUpperCase()}_SELECTION_ANIM`);
 
     const overlayToDestroy = character.container.getAt(2);
     character.container.remove(overlayToDestroy);

@@ -51,7 +51,8 @@ export enum MapKeysEnums {
 }
 
 export enum DataKeysEnums {
-  ANIMATIONS = "ANIMATIONS",
+  POKEMON_WALKING_ANIMATIONS = "POKEMON_WALKING_ANIMATIONS",
+  POKEMON_SELECTION_ANIMATIONS = "POKEMON_SELECTION_ANIMATIONS",
 }
 
 export enum SceneKeysEnums {

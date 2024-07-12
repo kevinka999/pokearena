@@ -50,7 +50,10 @@ export class PreloadScene extends Phaser.Scene {
       );
     }
 
-    this.load.json(DataKeysEnums.ANIMATIONS, "/data/animations.json");
+    this.load.json(
+      DataKeysEnums.POKEMON_WALKING_ANIMATIONS,
+      "/data/pokemon_walking_animations.json"
+    );
   }
 
   create() {
@@ -66,7 +69,7 @@ export class PreloadScene extends Phaser.Scene {
 
   #createAnimations() {
     const animations: AnimationConfig[] = this.cache.json.get(
-      DataKeysEnums.ANIMATIONS
+      DataKeysEnums.POKEMON_WALKING_ANIMATIONS
     );
 
     for (const assetKey in PokemonKeysEnums) {
