@@ -1,16 +1,6 @@
 import { Controller, ControllerKeysEnum } from "../core";
-import { GamePosition } from "../types/game";
+import { AnimationConfig, GamePosition } from "../types/game";
 import { DataKeysEnums, PokemonKeysEnums, SceneKeysEnums } from "../types/keys";
-
-type AnimationConfig = {
-  key: PokemonKeysEnums;
-  start: number;
-  end: number;
-  frameRate: number;
-  originX?: number;
-  originY?: number;
-  scale?: number;
-};
 
 const options: PokemonKeysEnums[] = [
   PokemonKeysEnums.BULBASAUR,
@@ -69,7 +59,7 @@ export class SelectionScene extends Phaser.Scene {
   create() {
     this.#controller = new Controller({ scene: this });
 
-    const animations: AnimationConfig[] = this.cache.json.get(
+    const animations: AnimationConfig<PokemonKeysEnums>[] = this.cache.json.get(
       DataKeysEnums.POKEMON_SELECTION_ANIMATIONS
     );
 
@@ -91,7 +81,7 @@ export class SelectionScene extends Phaser.Scene {
     }
   }
 
-  #createAnimations(animations: AnimationConfig[]) {
+  #createAnimations(animations: AnimationConfig<PokemonKeysEnums>[]) {
     animations.forEach((animation) => {
       this.anims.create({
         key: `${animation.key.toUpperCase()}_SELECTION_ANIM`,
@@ -110,7 +100,7 @@ export class SelectionScene extends Phaser.Scene {
     });
   }
 
-  #renderAllPokemonOptions(animations: AnimationConfig[]) {
+  #renderAllPokemonOptions(animations: AnimationConfig<PokemonKeysEnums>[]) {
     const margin = 10;
     const qtyOptionsPerRow = Math.floor(options.length / this.#rows);
 

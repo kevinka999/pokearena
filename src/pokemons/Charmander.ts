@@ -1,4 +1,4 @@
-import { RazorLeaf } from "../attacks/RazorLeaf";
+import { Scratch } from "../attacks/Scratch";
 import { Pokemon, PokemonTypes } from "../core";
 import { PlayerPokemonParams } from "../types/game";
 import { PokemonKeysEnums } from "../types/keys";
@@ -9,8 +9,8 @@ export class Charmander extends Pokemon {
       {
         ...pokemon,
         moveset: {
-          primary: RazorLeaf,
-          secondary: RazorLeaf,
+          primary: Scratch,
+          secondary: Scratch,
         },
         baseStatus: {
           HP: 39,

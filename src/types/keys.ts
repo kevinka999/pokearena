@@ -42,7 +42,7 @@ export enum PokemonKeysEnums {
 }
 
 export enum AttacksKeysEnums {
-  RAZOR_LEAF = "RAZOR_LEAF",
+  SCRATCH = "SCRATCH",
 }
 
 export enum MapKeysEnums {
@@ -51,6 +51,7 @@ export enum MapKeysEnums {
 }
 
 export enum DataKeysEnums {
+  ATTACK_ANIMATIONS = "ATTACK_ANIMATIONS",
   POKEMON_WALKING_ANIMATIONS = "POKEMON_WALKING_ANIMATIONS",
   POKEMON_SELECTION_ANIMATIONS = "POKEMON_SELECTION_ANIMATIONS",
 }

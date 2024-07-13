@@ -23,14 +23,13 @@ export class BattleScene extends Phaser.Scene {
   }
 
   create() {
+    this.#controller = new Controller({ scene: this });
+    this.#background = new Background({ scene: this });
     const PlayerPokemon = this.global.getSelectedPokemonClass();
     this.#pokemon = new PlayerPokemon({
       scene: this,
       level: 100,
     });
-
-    this.#controller = new Controller({ scene: this });
-    this.#background = new Background({ scene: this });
     this.#camera = new Camera({
       scene: this,
       followObject: this.#pokemon.gameObject,

@@ -23,4 +23,21 @@ export class Utils {
 
     throw new Error("Angle not defined");
   }
+
+  static getRadiansFromDirection(
+    direction: ControllerKeysEnum
+  ): number | undefined {
+    switch (direction) {
+      case ControllerKeysEnum.A:
+        return 0;
+      case ControllerKeysEnum.D:
+        return 3.142;
+      case ControllerKeysEnum.W:
+        return 1.571;
+      case ControllerKeysEnum.S:
+        return 4.712;
+      default:
+        return undefined;
+    }
+  }
 }

@@ -1,4 +1,4 @@
-import { GamePosition } from "../types/game";
+import { GamePosition, IPokemonAttack } from "../types/game";
 import { Attack, AttackBaseParams } from "./Attack";
 import { ControllerKeysEnum } from "./Controller";
 import { Player, PlayerParams } from "./Player";
@@ -19,8 +19,8 @@ export type PokemonIvs = {
 };
 
 type Moveset = {
-  primary: new (params: AttackBaseParams) => Attack;
-  secondary: new (params: AttackBaseParams) => Attack;
+  primary: IPokemonAttack;
+  secondary: IPokemonAttack;
 };
 
 export type PokemonBaseParams = {
@@ -70,6 +70,7 @@ export class Pokemon extends Player {
       scene: this.#scene,
       x: position.x,
       y: position.y,
+      direction: this.lookDirection,
       callback,
     });
 

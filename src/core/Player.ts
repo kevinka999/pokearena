@@ -27,6 +27,7 @@ export class Player {
   #assetKey: string;
   #gameObject: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody;
   #idleFrameConfig: IdleFrameConfig;
+  #lookDirection!: ControllerKeysEnum;
   #freeze!: boolean;
 
   constructor(params: PlayerParams) {
@@ -34,14 +35,13 @@ export class Player {
     this.#idleFrameConfig = params.idleFrameConfig;
     this.#freeze = false;
     this.#assetKey = params.gameObjectConfig.assetKey;
+    this.#lookDirection = params.facingDirection ?? ControllerKeysEnum.S;
     this.#gameObject = this.#scene.physics.add
       .sprite(
         params.gameObjectConfig.x,
         params.gameObjectConfig.y,
         params.gameObjectConfig.assetKey,
-        this.#getAssetFromDirection(
-          params.facingDirection ?? ControllerKeysEnum.S
-        )
+        this.#getAssetFromDirection(this.#lookDirection)
       )
       .setOrigin(0);
     this.#gameObject.setSize(16, 24);
@@ -60,6 +60,10 @@ export class Player {
     return this.#gameObject;
   }
 
+  get lookDirection() {
+    return this.#lookDirection;
+  }
+
   set freeze(value: boolean) {
     this.#freeze = value;
   }
@@ -75,7 +79,7 @@ export class Player {
       y: this.gameObject.y,
     });
     const isMoving = moveDirections.length > 0;
-    this.#handleAnimation(lookDirection, isMoving);
+    this.#handleLookDirection(lookDirection, isMoving);
   }
 
   #getAssetFromDirection(direction: ControllerKeysEnum) {
@@ -112,7 +116,8 @@ export class Player {
     }
   }
 
-  #handleAnimation(lookDirection: ControllerKeysEnum, isMoving: boolean) {
+  #handleLookDirection(lookDirection: ControllerKeysEnum, isMoving: boolean) {
+    this.#lookDirection = lookDirection;
     if (!isMoving) {
       const idleFrame = this.#idleFrameConfig[lookDirection];
       if (idleFrame === undefined) return;

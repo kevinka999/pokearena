@@ -1,3 +1,4 @@
+import { AnimationConfig } from "../types/game";
 import {
   PokemonKeysEnums,
   DataKeysEnums,
@@ -5,16 +6,6 @@ import {
   SceneKeysEnums,
   AttacksKeysEnums,
 } from "../types/keys";
-
-type AnimationConfig = {
-  key: string;
-  frames?: number[];
-  frameRate: number;
-  repeat: number;
-  delay: number;
-  yoyo: boolean;
-  assetKey: string;
-};
 
 export class PreloadScene extends Phaser.Scene {
   constructor() {
@@ -40,13 +31,10 @@ export class PreloadScene extends Phaser.Scene {
     }
 
     for (const attackKey in AttacksKeysEnums) {
-      this.load.spritesheet(
+      this.load.atlas(
         attackKey.toUpperCase(),
         `/assets/attacks/${attackKey.toLowerCase()}.png`,
-        {
-          frameWidth: 16,
-          frameHeight: 16,
-        }
+        `/assets/attacks/${attackKey.toLowerCase()}.json`
       );
     }
 
@@ -54,24 +42,23 @@ export class PreloadScene extends Phaser.Scene {
       DataKeysEnums.POKEMON_WALKING_ANIMATIONS,
       "/data/pokemon_walking_animations.json"
     );
+
+    this.load.json(
+      DataKeysEnums.ATTACK_ANIMATIONS,
+      "/data/attack_animations.json"
+    );
   }
 
   create() {
-    this.anims.create({
-      key: `${AttacksKeysEnums.RAZOR_LEAF}_ANIM`,
-      frames: this.anims.generateFrameNumbers(AttacksKeysEnums.RAZOR_LEAF),
-      frameRate: 20,
-    });
-
-    this.#createAnimations();
+    this.#createPokemonWalkingAnimations();
+    this.#createAttackAnimations();
     this.scene.switch(SceneKeysEnums.BATTLE);
   }
 
-  #createAnimations() {
-    const animations: AnimationConfig[] = this.cache.json.get(
+  #createPokemonWalkingAnimations() {
+    const animations: AnimationConfig<PokemonKeysEnums>[] = this.cache.json.get(
       DataKeysEnums.POKEMON_WALKING_ANIMATIONS
     );
-
     for (const assetKey in PokemonKeysEnums) {
       animations?.forEach((animation) => {
         this.anims.create({
@@ -84,6 +71,31 @@ export class PreloadScene extends Phaser.Scene {
           delay: animation.delay,
           yoyo: animation.yoyo,
         });
+      });
+    }
+  }
+
+  #createAttackAnimations() {
+    const animations: AnimationConfig<AttacksKeysEnums>[] = this.cache.json.get(
+      DataKeysEnums.ATTACK_ANIMATIONS
+    );
+    for (const attackKey in AttacksKeysEnums) {
+      const animationData = animations.find(
+        (animation) => animation.key === attackKey.toLowerCase()
+      );
+
+      this.anims.create({
+        key: `${attackKey.toUpperCase()}_ANIM`,
+        frames: this.anims.generateFrameNames(`${attackKey.toUpperCase()}`, {
+          prefix: `${animationData?.key.toLowerCase()}-`,
+          suffix: ".png",
+          start: animationData?.start,
+          end: animationData?.end,
+        }),
+        frameRate: animationData?.frameRate,
+        repeat: animationData?.repeat ?? 0,
+        delay: animationData?.delay ?? 0,
+        yoyo: animationData?.yoyo ?? false,
       });
     }
   }
