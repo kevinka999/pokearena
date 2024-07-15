@@ -1,7 +1,7 @@
 import { GamePosition, IPokemonAttack } from "../types/game";
-import { Attack, AttackBaseParams } from "./Attack";
 import { ControllerKeysEnum } from "./Controller";
 import { Player, PlayerParams } from "./Player";
+import { Utils } from "./Utils";
 
 export enum PokemonTypes {
   WATER = "water",
@@ -58,9 +58,11 @@ export class Pokemon extends Player {
     this.#type = pokemonParams.type;
     this.#moveset = pokemonParams.moveset;
     this.#attacks = this.#scene.physics.add.staticGroup();
+
+    this.#handlePokemonPrimaryAttack();
   }
 
-  primaryAttack(
+  #createPrimaryAttack(
     position: GamePosition,
     callback?: (sprite: Phaser.Physics.Arcade.Sprite) => void
   ) {
@@ -68,12 +70,51 @@ export class Pokemon extends Player {
 
     const attack = new this.#moveset.primary({
       scene: this.#scene,
-      x: position.x,
-      y: position.y,
+      position,
       direction: this.lookDirection,
       callback,
     });
 
     this.#attacks.add(attack);
+  }
+
+  #handlePokemonPrimaryAttack() {
+    this.#scene.input.on("pointerdown", (pointer: Phaser.Input.Pointer) => {
+      this.freeze = true;
+      const lookDirection = Utils.getPointerDirectionInRelationTo(
+        {
+          x: pointer.worldX,
+          y: pointer.worldY,
+        },
+        {
+          x: this.gameObject.x,
+          y: this.gameObject.y,
+        }
+      );
+
+      let attackPosition: GamePosition = {
+        x: this.gameObject.body.x + this.gameObject.body.width / 2,
+        y: this.gameObject.body.y + this.gameObject.body.height / 2,
+      };
+
+      switch (lookDirection) {
+        case ControllerKeysEnum.W:
+          attackPosition.y -= this.gameObject.body.height;
+          break;
+        case ControllerKeysEnum.D:
+          attackPosition.x += this.gameObject.body.width;
+          break;
+        case ControllerKeysEnum.A:
+          attackPosition.x -= this.gameObject.body.width;
+          break;
+        case ControllerKeysEnum.S:
+          attackPosition.y += this.gameObject.body.height;
+          break;
+      }
+
+      this.#createPrimaryAttack(attackPosition, (_sprite) => {
+        this.freeze = false;
+      });
+    });
   }
 }

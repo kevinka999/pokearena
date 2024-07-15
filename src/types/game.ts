@@ -5,12 +5,6 @@ export type GamePosition = {
   y: number;
 };
 
-export type GameObjectConfig = {
-  assetKey: string;
-  assetFrame?: number;
-  origin?: { x?: number; y?: number };
-} & GamePosition;
-
 export type SpriteGameObject =
   | Phaser.GameObjects.Image
   | Phaser.Types.Physics.Arcade.SpriteWithDynamicBody;
@@ -42,4 +36,5 @@ export type AnimationConfig<T = string> = {
   originX?: number;
   originY?: number;
   scale?: number;
+  size?: [number, number];
 };

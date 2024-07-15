@@ -1,9 +1,18 @@
-import { GameObjectConfig } from "../types/game";
+import { GamePosition } from "../types/game";
 import { AnimationKeysEnums } from "../types/keys";
 import { ControllerKeysEnum } from "./Controller";
 import { Utils } from "./Utils";
 
 type IdleFrameConfig = { [key in ControllerKeysEnum]?: number };
+
+export type GameObjectConfig = {
+  assetKey: string;
+  assetFrame?: number;
+  position: GamePosition;
+  origin?: [number, number];
+  hitbox: [number, number];
+  hitboxOffset: [number, number];
+};
 
 export type PlayerParams = {
   scene: Phaser.Scene;
@@ -38,21 +47,19 @@ export class Player {
     this.#lookDirection = params.facingDirection ?? ControllerKeysEnum.S;
     this.#gameObject = this.#scene.physics.add
       .sprite(
-        params.gameObjectConfig.x,
-        params.gameObjectConfig.y,
+        params.gameObjectConfig.position.x,
+        params.gameObjectConfig.position.y,
         params.gameObjectConfig.assetKey,
         this.#getAssetFromDirection(this.#lookDirection)
       )
       .setOrigin(0);
-    this.#gameObject.setSize(16, 24);
+    this.#gameObject.setSize(...params.gameObjectConfig.hitbox);
+    this.#gameObject.setOffset(...params.gameObjectConfig.hitboxOffset);
     this.#scene.physics.add.existing(this.gameObject, false);
     this.#gameObject.body.setCollideWorldBounds(true);
 
     if (params.gameObjectConfig.origin !== undefined) {
-      this.gameObject.setOrigin(
-        params.gameObjectConfig.origin.x,
-        params.gameObjectConfig.origin.y
-      );
+      this.gameObject.setOrigin(...params.gameObjectConfig.origin);
     }
   }
 

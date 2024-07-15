@@ -4,6 +4,7 @@
     "start": 0,
     "end": 4,
     "frameRate": 12,
-    "scale": 0.5
+    "scale": 0.5,
+    "size": [16, 16]
   }
 ]

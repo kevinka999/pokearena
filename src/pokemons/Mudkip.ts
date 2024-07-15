@@ -25,11 +25,12 @@ export class Mudkip extends Pokemon {
       {
         scene: scene,
         gameObjectConfig: {
-          x: 0,
-          y: 0,
+          position: { x: 0, y: 0 },
+          hitbox: [16, 16],
+          hitboxOffset: [8, 14],
           assetKey: PokemonKeysEnums.MUDKIP,
           assetFrame: 7,
-          origin: { x: 0.5, y: 0.5 },
+          origin: [0.5, 0.5],
         },
       }
     );

@@ -1,12 +1,4 @@
-import {
-  Background,
-  Camera,
-  Controller,
-  ControllerKeysEnum,
-  Pokemon,
-} from "../core";
-import { Utils } from "../core/Utils";
-import { GamePosition } from "../types/game";
+import { Background, Camera, Controller, Pokemon } from "../core";
 import { SceneKeysEnums } from "../types/keys";
 
 export class BattleScene extends Phaser.Scene {
@@ -44,8 +36,6 @@ export class BattleScene extends Phaser.Scene {
     this.#background.setSpawnPoint(this.#pokemon.gameObject);
     this.#background.addCollider(this.#pokemon.gameObject);
     this.#background.turnOnDebugMode();
-
-    this.#handlePokemonAttack();
   }
 
   update() {
@@ -56,55 +46,5 @@ export class BattleScene extends Phaser.Scene {
     const keysPressed = this.#controller.getKeysPressed();
     this.#pokemon.movePlayer(keysPressed, pointer);
     this.#camera.handleMovingFollowOffset(keysPressed);
-  }
-
-  #handlePokemonAttack() {
-    this.input.on("pointerdown", (pointer: Phaser.Input.Pointer) => {
-      this.#pokemon.freeze = true;
-      const lookDirection = Utils.getPointerDirectionInRelationTo(
-        {
-          x: pointer.worldX,
-          y: pointer.worldY,
-        },
-        {
-          x: this.#pokemon.gameObject.x,
-          y: this.#pokemon.gameObject.y,
-        }
-      );
-
-      let attackPosition: GamePosition;
-      switch (lookDirection) {
-        case ControllerKeysEnum.W:
-          attackPosition = {
-            x: this.#pokemon.gameObject.x,
-            y:
-              this.#pokemon.gameObject.y - this.#pokemon.gameObject.body.height,
-          };
-          break;
-        case ControllerKeysEnum.D:
-          attackPosition = {
-            x: this.#pokemon.gameObject.x + this.#pokemon.gameObject.body.width,
-            y: this.#pokemon.gameObject.y,
-          };
-          break;
-        case ControllerKeysEnum.A:
-          attackPosition = {
-            x: this.#pokemon.gameObject.x - this.#pokemon.gameObject.body.width,
-            y: this.#pokemon.gameObject.y,
-          };
-          break;
-        case ControllerKeysEnum.S:
-          attackPosition = {
-            x: this.#pokemon.gameObject.x,
-            y:
-              this.#pokemon.gameObject.y + this.#pokemon.gameObject.body.height,
-          };
-          break;
-      }
-
-      this.#pokemon.primaryAttack(attackPosition, (_sprite) => {
-        this.#pokemon.freeze = false;
-      });
-    });
   }
 }
