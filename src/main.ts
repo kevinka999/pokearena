@@ -1,5 +1,5 @@
 import Phaser from "phaser";
-import { PreloadScene, BattleScene, SelectionScene } from "./scenes";
+import { PreloadScene, BattleScene, SelectionScene, HudScene } from "./scenes";
 import { GlobalPlugin } from "./plugin/GlobalPlugin";
 
 declare module "phaser" {
@@ -36,5 +36,5 @@ const game = new Phaser.Game({
       },
     ],
   },
-  scene: [SelectionScene, PreloadScene, BattleScene],
+  scene: [SelectionScene, PreloadScene, BattleScene, HudScene],
 });

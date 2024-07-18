@@ -10,7 +10,7 @@ export class Bot {
   #gameObject: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody;
   #events!: Phaser.Events.EventEmitter;
   #life!: number;
-  #damages: Damage[];
+  #damages!: Damage[];
 
   constructor(params: BotParams) {
     this.#scene = params.scene;
@@ -47,6 +47,10 @@ export class Bot {
     return this.#events;
   }
 
+  get life() {
+    return this.#life;
+  }
+
   #configureEvents() {
     this.#events.on("damage", this.#handleDamage, this);
   }
@@ -56,8 +60,9 @@ export class Bot {
     if (index !== -1) return;
 
     this.#damages.push(damage);
-    this.#life -= damage.damage;
-    if (this.#life <= 0) this.#handleDeath();
+    const newLife = (this.#life -= damage.damage);
+    this.#life = newLife >= 0 ? newLife : 0;
+    if (this.#life === 0) this.#handleDeath();
   }
 
   #handleDeath() {

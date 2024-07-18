@@ -294,7 +294,9 @@ export class SelectionScene extends Phaser.Scene {
         const selectCharacter = this.#characters.get(this.#selectedIndex);
         if (selectCharacter !== undefined && selectCharacter.isSelected) {
           this.global.selectCharacter = selectCharacter.pokemonKey;
-          this.scene.switch(SceneKeysEnums.PRELOAD);
+
+          this.scene.start(SceneKeysEnums.PRELOAD);
+          this.scene.stop();
         }
       }
     );

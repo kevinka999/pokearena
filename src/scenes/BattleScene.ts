@@ -44,12 +44,9 @@ export class BattleScene extends Phaser.Scene {
         this.#background.displayHeight,
       ],
     });
-
     this.#background.setSpawnPoint(this.#pokemon.gameObject);
     this.#background.setSpawnPoint(this.#bot.gameObject);
     this.#background.addCollider(this.#pokemon.gameObject);
-
-    this.#pokemon.attacks;
 
     this.physics.add.collider(this.#pokemon.gameObject, this.#bot.gameObject);
     this.physics.add.overlap(
@@ -66,6 +63,9 @@ export class BattleScene extends Phaser.Scene {
       this.#bot.events
     );
 
+    this.registry.set("player", this.#pokemon);
+    this.registry.set("bot", this.#bot);
+    this.scene.launch(SceneKeysEnums.BATTLE_HUD);
     this.#background.turnOnDebugMode();
   }
 

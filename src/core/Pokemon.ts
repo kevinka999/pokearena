@@ -37,6 +37,7 @@ export class Pokemon extends Player {
   #type!: [PokemonTypes];
   #moveset!: Moveset;
   #attacks: Phaser.Physics.Arcade.Group;
+  #totalLife!: number;
   #life!: number;
   #damages: Damage[];
 
@@ -61,6 +62,7 @@ export class Pokemon extends Player {
     this.#moveset = pokemonParams.moveset;
     this.#attacks = this.#scene.physics.add.group();
 
+    this.#totalLife = 100;
     this.#life = 100;
     this.#damages = [];
 
@@ -72,6 +74,14 @@ export class Pokemon extends Player {
     return this.#attacks;
   }
 
+  get totalLife() {
+    return this.#life;
+  }
+
+  get life() {
+    return this.#life;
+  }
+
   #configureEvents() {
     this.events.on("damage", this.#handleDamage);
   }
@@ -81,8 +91,9 @@ export class Pokemon extends Player {
     if (index !== -1) return;
 
     this.#damages.push(damage);
-    this.#life -= damage.damage;
-    if (this.#life >= 0) this.#handleDeath();
+    const newLife = (this.#life -= damage.damage);
+    this.#life = newLife >= 0 ? newLife : 0;
+    if (this.#life === 0) this.#handleDeath();
   }
 
   #handleDeath() {

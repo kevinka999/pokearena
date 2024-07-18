@@ -52,6 +52,7 @@ export class PreloadScene extends Phaser.Scene {
   create() {
     this.#createPokemonWalkingAnimations();
     this.#createAttackAnimations();
+
     this.scene.switch(SceneKeysEnums.BATTLE);
   }
 
