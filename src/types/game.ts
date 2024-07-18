@@ -38,3 +38,17 @@ export type AnimationConfig<T = string> = {
   scale?: number;
   size?: [number, number];
 };
+
+export type GameObjectConfig = {
+  assetKey: string;
+  assetFrame?: number;
+  position: GamePosition;
+  origin?: [number, number];
+  hitbox: [number, number];
+  hitboxOffset: [number, number];
+};
+
+export type Damage = {
+  id: string;
+  damage: number;
+};

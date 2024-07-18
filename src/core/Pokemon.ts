@@ -1,4 +1,4 @@
-import { GamePosition, IPokemonAttack } from "../types/game";
+import { Damage, GamePosition, IPokemonAttack } from "../types/game";
 import { ControllerKeysEnum } from "./Controller";
 import { Player, PlayerParams } from "./Player";
 import { Utils } from "./Utils";
@@ -36,7 +36,9 @@ export class Pokemon extends Player {
   #baseStatus!: PokemonIvs;
   #type!: [PokemonTypes];
   #moveset!: Moveset;
-  #attacks: Phaser.Physics.Arcade.StaticGroup;
+  #attacks: Phaser.Physics.Arcade.Group;
+  #life!: number;
+  #damages: Damage[];
 
   constructor(
     pokemonParams: PokemonBaseParams,
@@ -57,9 +59,34 @@ export class Pokemon extends Player {
     this.#baseStatus = pokemonParams.baseStatus;
     this.#type = pokemonParams.type;
     this.#moveset = pokemonParams.moveset;
-    this.#attacks = this.#scene.physics.add.staticGroup();
+    this.#attacks = this.#scene.physics.add.group();
 
+    this.#life = 100;
+    this.#damages = [];
+
+    this.#configureEvents();
     this.#handlePokemonPrimaryAttack();
+  }
+
+  get attacks() {
+    return this.#attacks;
+  }
+
+  #configureEvents() {
+    this.events.on("damage", this.#handleDamage);
+  }
+
+  #handleDamage(damage: Damage) {
+    const index = this.#damages.findIndex((dmg) => dmg.id === damage.id);
+    if (index !== -1) return;
+
+    this.#damages.push(damage);
+    this.#life -= damage.damage;
+    if (this.#life >= 0) this.#handleDeath();
+  }
+
+  #handleDeath() {
+    this.gameObject.destroy();
   }
 
   #createPrimaryAttack(

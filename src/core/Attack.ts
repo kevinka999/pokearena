@@ -1,6 +1,7 @@
 import { AnimationConfig, GamePosition } from "../types/game";
 import { AttacksKeysEnums, DataKeysEnums } from "../types/keys";
 import { ControllerKeysEnum } from "./Controller";
+import { nanoid } from "nanoid";
 import { Utils } from "./Utils";
 
 export enum AttackTypesEnum {
@@ -22,8 +23,13 @@ type Params = {
 } & AttackBaseParams;
 
 export class Attack extends Phaser.Physics.Arcade.Sprite {
+  #id!: string;
+  #damage!: number;
+
   constructor(params: Params) {
     super(params.scene, params.position.x, params.position.y, params.spriteKey);
+    this.#id = nanoid();
+    this.#damage = params.damage;
     this.visible = false;
     params.scene.add.existing(this);
     params.scene.physics.world.enableBody(this);
@@ -41,6 +47,14 @@ export class Attack extends Phaser.Physics.Arcade.Sprite {
       },
       this
     );
+  }
+
+  get id() {
+    return this.#id;
+  }
+
+  get damage() {
+    return this.#damage;
   }
 
   #setExternalConfiguration(key: AttacksKeysEnums) {

@@ -1,18 +1,9 @@
-import { GamePosition } from "../types/game";
+import { GameObjectConfig } from "../types/game";
 import { AnimationKeysEnums } from "../types/keys";
 import { ControllerKeysEnum } from "./Controller";
 import { Utils } from "./Utils";
 
 type IdleFrameConfig = { [key in ControllerKeysEnum]?: number };
-
-export type GameObjectConfig = {
-  assetKey: string;
-  assetFrame?: number;
-  position: GamePosition;
-  origin?: [number, number];
-  hitbox: [number, number];
-  hitboxOffset: [number, number];
-};
 
 export type PlayerParams = {
   scene: Phaser.Scene;
@@ -38,9 +29,11 @@ export class Player {
   #idleFrameConfig: IdleFrameConfig;
   #lookDirection!: ControllerKeysEnum;
   #freeze!: boolean;
+  #events!: Phaser.Events.EventEmitter;
 
   constructor(params: PlayerParams) {
     this.#scene = params.scene;
+    this.#events = new Phaser.Events.EventEmitter();
     this.#idleFrameConfig = params.idleFrameConfig;
     this.#freeze = false;
     this.#assetKey = params.gameObjectConfig.assetKey;
@@ -55,12 +48,17 @@ export class Player {
       .setOrigin(0);
     this.#gameObject.setSize(...params.gameObjectConfig.hitbox);
     this.#gameObject.setOffset(...params.gameObjectConfig.hitboxOffset);
-    this.#scene.physics.add.existing(this.gameObject, false);
     this.#gameObject.body.setCollideWorldBounds(true);
+    this.#gameObject.setPushable(false);
+    this.#scene.physics.add.existing(this.gameObject, false);
 
     if (params.gameObjectConfig.origin !== undefined) {
       this.gameObject.setOrigin(...params.gameObjectConfig.origin);
     }
+  }
+
+  get events() {
+    return this.#events;
   }
 
   get gameObject() {
