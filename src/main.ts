@@ -16,8 +16,8 @@ const game = new Phaser.Game({
   roundPixels: false,
   scale: {
     parent: "main-container",
-    width: 320,
-    height: 180,
+    width: 1920,
+    height: 1080,
     mode: Phaser.Scale.FIT,
     autoCenter: Phaser.Scale.CENTER_BOTH,
   },

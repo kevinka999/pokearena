@@ -30,6 +30,7 @@ export class SelectionScene extends Phaser.Scene {
   #previousIndex?: number;
   #frame!: { width: number; height: number };
   #controller!: Controller;
+  #borderSize: number = 16;
 
   constructor() {
     super({
@@ -101,7 +102,7 @@ export class SelectionScene extends Phaser.Scene {
   }
 
   #renderAllPokemonOptions(animations: AnimationConfig<PokemonKeysEnums>[]) {
-    const margin = 10;
+    const margin = 50;
     const qtyOptionsPerRow = Math.floor(options.length / this.#rows);
 
     const canvasWidth = this.scale.width;
@@ -138,7 +139,7 @@ export class SelectionScene extends Phaser.Scene {
 
       if ((idx + 1) / rowsRendered === qtyOptionsPerRow) {
         rowsRendered++;
-        x = 10;
+        x = margin;
         y += heightForEach + margin;
       } else {
         x += widthForEach + margin;
@@ -156,31 +157,26 @@ export class SelectionScene extends Phaser.Scene {
       scale?: number;
     }
   ) {
-    const frame = new Phaser.GameObjects.Rectangle(
-      this,
-      0,
-      0,
-      this.#frame.width,
-      this.#frame.height,
-      0xffffff
-    ).setOrigin(0);
+    const frame = this.add.graphics();
+    frame.fillStyle(0xffffff, 1.0);
+    frame.fillRect(0, 0, this.#frame.width, this.#frame.height);
 
     const sprite = new Phaser.GameObjects.Sprite(
       this,
-      frame.width / 2,
-      frame.height / 2,
+      this.#frame.width / 2,
+      this.#frame.height / 2,
       `${pokemon.key.toUpperCase()}_SELECTION`,
       "0001.png"
     )
-      .setScale(pokemon.scale ?? 2)
+      .setScale((pokemon.scale ?? 2) * 6)
       .setOrigin(pokemon.originX ?? 0.5, pokemon.originY ?? 0.5);
 
     const maskGraphics = this.make.graphics();
     maskGraphics.fillRect(
-      position.x + 1,
-      position.y + 1,
-      frame.width - 2,
-      frame.height - 2
+      position.x + this.#borderSize / 2,
+      position.y + this.#borderSize / 2,
+      this.#frame.width - this.#borderSize,
+      this.#frame.height - this.#borderSize
     );
     const mask = maskGraphics.createGeometryMask();
     sprite.setMask(mask);
@@ -188,7 +184,12 @@ export class SelectionScene extends Phaser.Scene {
     const overlay = this.add.graphics();
     overlay
       .fillStyle(0x000000, 0.8)
-      .fillRect(1, 1, frame.width - 2, frame.height - 2);
+      .fillRect(
+        this.#borderSize / 2,
+        this.#borderSize / 2,
+        this.#frame.width - this.#borderSize,
+        this.#frame.height - this.#borderSize
+      );
 
     this.#characters.set(index, {
       container: this.add.container(position.x, position.y, [
@@ -221,7 +222,12 @@ export class SelectionScene extends Phaser.Scene {
     const overlay = this.add.graphics();
     overlay
       .fillStyle(0x000000, 0.8)
-      .fillRect(1, 1, this.#frame.width - 2, this.#frame.height - 2);
+      .fillRect(
+        this.#borderSize / 2,
+        this.#borderSize / 2,
+        this.#frame.width - this.#borderSize,
+        this.#frame.height - this.#borderSize
+      );
 
     character.isSelected = false;
     character.container.add(overlay);

@@ -16,6 +16,8 @@ export class BattleScene extends Phaser.Scene {
   }
 
   create() {
+    this.#init();
+
     this.#controller = new Controller({ scene: this });
     this.#background = new Background({ scene: this });
     const PlayerPokemon = this.global.getSelectedPokemonClass();
@@ -65,7 +67,8 @@ export class BattleScene extends Phaser.Scene {
 
     this.registry.set("player", this.#pokemon);
     this.registry.set("bot", this.#bot);
-    this.scene.launch(SceneKeysEnums.BATTLE_HUD);
+
+    // this.scene.launch(SceneKeysEnums.BATTLE_HUD);
     this.#background.turnOnDebugMode();
   }
 
@@ -77,5 +80,16 @@ export class BattleScene extends Phaser.Scene {
     const keysPressed = this.#controller.getKeysPressed();
     this.#pokemon.movePlayer(keysPressed, pointer);
     this.#camera.handleMovingFollowOffset(keysPressed);
+  }
+
+  #init() {
+    const sceneWidth = 320;
+    const sceneHeight = 180;
+
+    const scaleX = this.scale.width / sceneWidth;
+    const scaleY = this.scale.height / sceneHeight;
+    const scale = Math.min(scaleX, scaleY);
+
+    this.cameras.main.setZoom(scale);
   }
 }
