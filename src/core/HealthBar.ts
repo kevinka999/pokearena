@@ -26,14 +26,9 @@ export class HealthBar extends Phaser.GameObjects.Container {
     this.#life = params.initialLife;
     this.#currentLife = params.initialLife;
 
-    const container = new Phaser.GameObjects.Rectangle(
-      params.scene,
-      params.x,
-      params.y,
-      params.width,
-      params.height,
-      0x00000
-    ).setOrigin(0);
+    const container = this.#scene.add.graphics();
+    container.fillStyle(0x00000, 1.0);
+    container.fillRect(params.x, params.y, params.width, params.height);
 
     this.#health = new Phaser.GameObjects.Rectangle(
       params.scene,

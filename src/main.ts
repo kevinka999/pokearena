@@ -11,6 +11,9 @@ declare module "phaser" {
 const game = new Phaser.Game({
   type: Phaser.CANVAS,
   pixelArt: true,
+  antialias: false,
+  autoRound: false,
+  roundPixels: false,
   scale: {
     parent: "main-container",
     width: 320,
