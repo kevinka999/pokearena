@@ -68,7 +68,7 @@ export class BattleScene extends Phaser.Scene {
     this.registry.set("player", this.#pokemon);
     this.registry.set("bot", this.#bot);
 
-    // this.scene.launch(SceneKeysEnums.BATTLE_HUD);
+    this.scene.launch(SceneKeysEnums.BATTLE_HUD);
     this.#background.turnOnDebugMode();
   }
 

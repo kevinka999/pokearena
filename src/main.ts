@@ -39,5 +39,5 @@ const game = new Phaser.Game({
       },
     ],
   },
-  scene: [SelectionScene, PreloadScene, BattleScene, HudScene],
+  scene: [PreloadScene, SelectionScene, BattleScene, HudScene],
 });

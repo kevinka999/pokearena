@@ -6,19 +6,68 @@ import {
   SceneKeysEnums,
   AttacksKeysEnums,
 } from "../types/keys";
+import { selectionOptions } from "./SelectionScene";
 
 export class PreloadScene extends Phaser.Scene {
   constructor() {
     super({
       key: SceneKeysEnums.PRELOAD,
-      active: false,
+      active: true,
     });
   }
 
   preload() {
-    this.load.image(MapKeysEnums.TILESET, "/map/tileset_extruded.png");
-    this.load.tilemapTiledJSON(MapKeysEnums.MAPCONFIG, "/map/map_config.json");
+    this.#preloadTilesets();
+    this.#preloadWalkingAnimations();
+    this.#preloadAttackAnimations();
+    this.#preloadSelectionAnimations();
+    this.#preloadSounds();
+  }
 
+  create() {
+    this.#createSounds();
+    this.#createPokemonSelectionAnimations();
+    this.#createPokemonWalkingAnimations();
+    this.#createAttackAnimations();
+
+    this.scene.switch(SceneKeysEnums.SELECTION);
+  }
+
+  #preloadSelectionAnimations() {
+    selectionOptions.forEach((pokemonKey) => {
+      this.load.atlas(
+        `${pokemonKey.toUpperCase()}_SELECTION`,
+        `/assets/pokemon/selection/${pokemonKey.toLowerCase()}.png`,
+        `/assets/pokemon/selection/${pokemonKey.toLowerCase()}.json`
+      );
+    });
+
+    this.load.json(
+      DataKeysEnums.POKEMON_SELECTION_ANIMATIONS,
+      "/data/pokemon_selection_animations.json"
+    );
+  }
+
+  #preloadSounds() {
+    this.global.soundManager.preload(this);
+  }
+
+  #preloadAttackAnimations() {
+    for (const attackKey in AttacksKeysEnums) {
+      this.load.atlas(
+        attackKey.toUpperCase(),
+        `/assets/attacks/${attackKey.toLowerCase()}.png`,
+        `/assets/attacks/${attackKey.toLowerCase()}.json`
+      );
+    }
+
+    this.load.json(
+      DataKeysEnums.ATTACK_ANIMATIONS,
+      "/data/attack_animations.json"
+    );
+  }
+
+  #preloadWalkingAnimations() {
     for (const pokemonKey in PokemonKeysEnums) {
       this.load.spritesheet(
         pokemonKey.toUpperCase(),
@@ -30,30 +79,42 @@ export class PreloadScene extends Phaser.Scene {
       );
     }
 
-    for (const attackKey in AttacksKeysEnums) {
-      this.load.atlas(
-        attackKey.toUpperCase(),
-        `/assets/attacks/${attackKey.toLowerCase()}.png`,
-        `/assets/attacks/${attackKey.toLowerCase()}.json`
-      );
-    }
-
     this.load.json(
       DataKeysEnums.POKEMON_WALKING_ANIMATIONS,
       "/data/pokemon_walking_animations.json"
     );
-
-    this.load.json(
-      DataKeysEnums.ATTACK_ANIMATIONS,
-      "/data/attack_animations.json"
-    );
   }
 
-  create() {
-    this.#createPokemonWalkingAnimations();
-    this.#createAttackAnimations();
+  #preloadTilesets() {
+    this.load.image(MapKeysEnums.TILESET, "/map/tileset_extruded.png");
+    this.load.tilemapTiledJSON(MapKeysEnums.MAPCONFIG, "/map/map_config.json");
+  }
 
-    this.scene.switch(SceneKeysEnums.BATTLE);
+  #createSounds() {
+    this.global.soundManager.create(this);
+  }
+
+  #createPokemonSelectionAnimations() {
+    const animations: AnimationConfig<PokemonKeysEnums>[] = this.cache.json.get(
+      DataKeysEnums.POKEMON_SELECTION_ANIMATIONS
+    );
+
+    animations.forEach((animation) => {
+      this.anims.create({
+        key: `${animation.key.toUpperCase()}_SELECTION_ANIM`,
+        frames: this.anims.generateFrameNames(
+          `${animation.key.toUpperCase()}_SELECTION`,
+          {
+            zeroPad: 4,
+            suffix: ".png",
+            start: animation.start,
+            end: animation.end,
+          }
+        ),
+        frameRate: animation.frameRate,
+        repeat: -1,
+      });
+    });
   }
 
   #createPokemonWalkingAnimations() {

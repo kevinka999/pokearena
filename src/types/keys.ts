@@ -69,3 +69,8 @@ export enum AnimationKeysEnums {
   POKEMON_LEFT = "POKEMON_MOVE_LEFT",
   POKEMON_RIGHT = "POKEMON_MOVE_RIGHT",
 }
+
+export enum SFXKeysEnums {
+  SELECT = "SELECT",
+  CONFIRM = "CONFIRM",
+}

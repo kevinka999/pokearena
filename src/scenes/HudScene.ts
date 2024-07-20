@@ -18,37 +18,7 @@ export class HudScene extends Phaser.Scene {
     this.#player = this.registry.get("player");
     this.#bot = this.registry.get("bot");
 
-    this.#createAnimations();
     this.#createLife();
-  }
-
-  #createAnimations() {
-    let animations: AnimationConfig<PokemonKeysEnums>[] = this.cache.json.get(
-      DataKeysEnums.POKEMON_SELECTION_ANIMATIONS
-    );
-    animations = animations.filter((animation) =>
-      [
-        this.#bot.gameObject.texture.key,
-        this.#player.gameObject.texture.key,
-      ].includes(animation.key?.toUpperCase() || "")
-    );
-
-    animations.forEach((animation) => {
-      this.anims.create({
-        key: `${animation.key.toUpperCase()}_SELECTION_ANIM`,
-        frames: this.anims.generateFrameNames(
-          `${animation.key.toUpperCase()}_SELECTION`,
-          {
-            zeroPad: 4,
-            suffix: ".png",
-            start: animation.start,
-            end: animation.end,
-          }
-        ),
-        frameRate: animation.frameRate,
-        repeat: -1,
-      });
-    });
   }
 
   #createLife() {

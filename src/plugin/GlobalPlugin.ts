@@ -1,4 +1,5 @@
 import { Pokemon } from "../core";
+import { SoundManager } from "../core/SoundManager";
 import {
   Bulbasaur,
   Charmander,
@@ -33,9 +34,16 @@ const classMap: { [key in PokemonKeysEnums]?: any } = {
 
 export class GlobalPlugin extends Phaser.Plugins.BasePlugin {
   #selectCharacter?: PokemonKeysEnums;
+  #soundManager!: SoundManager;
 
   constructor(pluginManager: Phaser.Plugins.PluginManager) {
     super(pluginManager);
+
+    this.#soundManager = new SoundManager();
+  }
+
+  get soundManager() {
+    return this.#soundManager;
   }
 
   get selectCharacter(): PokemonKeysEnums | undefined {

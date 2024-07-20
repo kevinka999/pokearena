@@ -1,8 +1,19 @@
 import { Controller, ControllerKeysEnum } from "../core";
 import { AnimationConfig, GamePosition } from "../types/game";
-import { DataKeysEnums, PokemonKeysEnums, SceneKeysEnums } from "../types/keys";
+import {
+  DataKeysEnums,
+  PokemonKeysEnums,
+  SceneKeysEnums,
+  SFXKeysEnums,
+} from "../types/keys";
 
-const options: PokemonKeysEnums[] = [
+type CharacterSelection = {
+  container: Phaser.GameObjects.Container;
+  pokemonKey: PokemonKeysEnums;
+  isSelected: boolean;
+};
+
+export const selectionOptions: PokemonKeysEnums[] = [
   PokemonKeysEnums.BULBASAUR,
   PokemonKeysEnums.CHARMANDER,
   PokemonKeysEnums.SQUIRTLE,
@@ -17,12 +28,6 @@ const options: PokemonKeysEnums[] = [
   PokemonKeysEnums.PIPLUP,
 ];
 
-type CharacterSelection = {
-  container: Phaser.GameObjects.Container;
-  pokemonKey: PokemonKeysEnums;
-  isSelected: boolean;
-};
-
 export class SelectionScene extends Phaser.Scene {
   #rows: number = 3;
   #characters!: Map<number, CharacterSelection>;
@@ -35,37 +40,17 @@ export class SelectionScene extends Phaser.Scene {
   constructor() {
     super({
       key: SceneKeysEnums.SELECTION,
-      active: true,
+      active: false,
     });
 
     this.#characters = new Map<number, CharacterSelection>();
     this.#selectedIndex = 0;
   }
 
-  preload() {
-    options.forEach((pokemonKey) => {
-      this.load.atlas(
-        `${pokemonKey.toUpperCase()}_SELECTION`,
-        `/assets/pokemon/selection/${pokemonKey.toLowerCase()}.png`,
-        `/assets/pokemon/selection/${pokemonKey.toLowerCase()}.json`
-      );
-    });
-
-    this.load.json(
-      DataKeysEnums.POKEMON_SELECTION_ANIMATIONS,
-      "/data/pokemon_selection_animations.json"
-    );
-  }
-
   create() {
     this.#controller = new Controller({ scene: this });
 
-    const animations: AnimationConfig<PokemonKeysEnums>[] = this.cache.json.get(
-      DataKeysEnums.POKEMON_SELECTION_ANIMATIONS
-    );
-
-    this.#createAnimations(animations);
-    this.#renderAllPokemonOptions(animations);
+    this.#renderAllPokemonOptions();
     this.#handleChangeSelection();
     this.#handleSelectCharacter();
   }
@@ -82,28 +67,13 @@ export class SelectionScene extends Phaser.Scene {
     }
   }
 
-  #createAnimations(animations: AnimationConfig<PokemonKeysEnums>[]) {
-    animations.forEach((animation) => {
-      this.anims.create({
-        key: `${animation.key.toUpperCase()}_SELECTION_ANIM`,
-        frames: this.anims.generateFrameNames(
-          `${animation.key.toUpperCase()}_SELECTION`,
-          {
-            zeroPad: 4,
-            suffix: ".png",
-            start: animation.start,
-            end: animation.end,
-          }
-        ),
-        frameRate: animation.frameRate,
-        repeat: -1,
-      });
-    });
-  }
+  #renderAllPokemonOptions() {
+    const animations: AnimationConfig<PokemonKeysEnums>[] = this.cache.json.get(
+      DataKeysEnums.POKEMON_SELECTION_ANIMATIONS
+    );
 
-  #renderAllPokemonOptions(animations: AnimationConfig<PokemonKeysEnums>[]) {
     const margin = 50;
-    const qtyOptionsPerRow = Math.floor(options.length / this.#rows);
+    const qtyOptionsPerRow = Math.floor(selectionOptions.length / this.#rows);
 
     const canvasWidth = this.scale.width;
     const canvasHeight = this.scale.height;
@@ -118,7 +88,7 @@ export class SelectionScene extends Phaser.Scene {
     let x = margin;
     let y = margin;
     let rowsRendered = 1;
-    options.forEach((pokemonKey, idx) => {
+    selectionOptions.forEach((pokemonKey, idx) => {
       const animationData = animations.find(
         (animation) => animation.key === pokemonKey.toLowerCase()
       );
@@ -246,6 +216,7 @@ export class SelectionScene extends Phaser.Scene {
 
         this.#previousIndex = this.#selectedIndex;
         this.#selectedIndex = previousCharacterIndex;
+        this.global.soundManager.play(SFXKeysEnums.SELECT);
       }
     );
 
@@ -260,13 +231,16 @@ export class SelectionScene extends Phaser.Scene {
 
         this.#previousIndex = this.#selectedIndex;
         this.#selectedIndex = nextCharacterIndex;
+        this.global.soundManager.play(SFXKeysEnums.SELECT);
       }
     );
 
     this.#controller.listenEventKeyboardDown(
       ControllerKeysEnum.W,
       (e: Phaser.Input.Keyboard.Key) => {
-        const qtyOptionsPerRow = Math.floor(options.length / this.#rows);
+        const qtyOptionsPerRow = Math.floor(
+          selectionOptions.length / this.#rows
+        );
         let nextCharacter = this.#selectedIndex - qtyOptionsPerRow;
         if (nextCharacter <= 0) {
           nextCharacter = 0;
@@ -274,13 +248,16 @@ export class SelectionScene extends Phaser.Scene {
 
         this.#previousIndex = this.#selectedIndex;
         this.#selectedIndex = nextCharacter;
+        this.global.soundManager.play(SFXKeysEnums.SELECT);
       }
     );
 
     this.#controller.listenEventKeyboardDown(
       ControllerKeysEnum.S,
       (e: Phaser.Input.Keyboard.Key) => {
-        const qtyOptionsPerRow = Math.floor(options.length / this.#rows);
+        const qtyOptionsPerRow = Math.floor(
+          selectionOptions.length / this.#rows
+        );
         const lastPosition = this.#characters.size;
         let nextCharacter = this.#selectedIndex + qtyOptionsPerRow;
         if (nextCharacter >= lastPosition) {
@@ -289,6 +266,7 @@ export class SelectionScene extends Phaser.Scene {
 
         this.#previousIndex = this.#selectedIndex;
         this.#selectedIndex = nextCharacter;
+        this.global.soundManager.play(SFXKeysEnums.SELECT);
       }
     );
   }
@@ -301,8 +279,9 @@ export class SelectionScene extends Phaser.Scene {
         if (selectCharacter !== undefined && selectCharacter.isSelected) {
           this.global.selectCharacter = selectCharacter.pokemonKey;
 
-          this.scene.start(SceneKeysEnums.PRELOAD);
-          this.scene.stop();
+          this.global.soundManager.play(SFXKeysEnums.CONFIRM);
+          this.scene.start(SceneKeysEnums.BATTLE);
+          this.scene.remove();
         }
       }
     );
