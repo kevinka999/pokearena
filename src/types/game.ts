@@ -1,5 +1,11 @@
 import { Attack, AttackBaseParams, Pokemon, PokemonIvs } from "../core";
 
+export enum PokemonTypes {
+  WATER = "water",
+  FIRE = "fire",
+  GRASS = "grass",
+}
+
 export type GamePosition = {
   x: number;
   y: number;
@@ -51,4 +57,5 @@ export type GameObjectConfig = {
 export type Damage = {
   id: string;
   damage: number;
+  originId: string;
 };

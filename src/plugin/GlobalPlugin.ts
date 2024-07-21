@@ -35,11 +35,17 @@ const classMap: { [key in PokemonKeysEnums]?: any } = {
 export class GlobalPlugin extends Phaser.Plugins.BasePlugin {
   #selectCharacter?: PokemonKeysEnums;
   #soundManager!: SoundManager;
+  #events!: Phaser.Events.EventEmitter;
 
   constructor(pluginManager: Phaser.Plugins.PluginManager) {
     super(pluginManager);
 
     this.#soundManager = new SoundManager();
+    this.#events = new Phaser.Events.EventEmitter();
+  }
+
+  get events() {
+    return this.#events;
   }
 
   get soundManager() {

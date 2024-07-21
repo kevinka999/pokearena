@@ -13,6 +13,7 @@ export type AttackBaseParams = {
   scene: Phaser.Scene;
   position: GamePosition;
   direction: ControllerKeysEnum;
+  originId: string;
   callback?: (sprite: Phaser.Physics.Arcade.Sprite) => void;
 };
 
@@ -24,11 +25,13 @@ type Params = {
 
 export class Attack extends Phaser.Physics.Arcade.Sprite {
   #id!: string;
+  #originId!: string;
   #damage!: number;
 
   constructor(params: Params) {
     super(params.scene, params.position.x, params.position.y, params.spriteKey);
     this.#id = nanoid();
+    this.#originId = params.originId;
     this.#damage = params.damage;
     this.visible = false;
     params.scene.add.existing(this);
@@ -51,6 +54,10 @@ export class Attack extends Phaser.Physics.Arcade.Sprite {
 
   get id() {
     return this.#id;
+  }
+
+  get originId() {
+    return this.#originId;
   }
 
   get damage() {

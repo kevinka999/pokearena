@@ -1,13 +1,11 @@
-import { Damage, GamePosition, IPokemonAttack } from "../types/game";
+import {
+  Damage,
+  GamePosition,
+  IPokemonAttack,
+  PokemonTypes,
+} from "../types/game";
 import { ControllerKeysEnum } from "./Controller";
 import { Player, PlayerParams } from "./Player";
-import { Utils } from "./Utils";
-
-export enum PokemonTypes {
-  WATER = "water",
-  FIRE = "fire",
-  GRASS = "grass",
-}
 
 export type PokemonIvs = {
   HP: number;
@@ -26,7 +24,7 @@ type Moveset = {
 export type PokemonBaseParams = {
   level: number;
   baseStatus: PokemonIvs;
-  type: [PokemonTypes];
+  type: PokemonTypes[];
   moveset: Moveset;
 };
 
@@ -34,12 +32,12 @@ export class Pokemon extends Player {
   #scene: Phaser.Scene;
   #level!: number;
   #baseStatus!: PokemonIvs;
-  #type!: [PokemonTypes];
+  #type!: PokemonTypes[];
   #moveset!: Moveset;
   #attacks: Phaser.Physics.Arcade.Group;
   #totalLife!: number;
   #life!: number;
-  #damages: Damage[];
+  damages: Damage[] = [];
 
   constructor(
     pokemonParams: PokemonBaseParams,
@@ -64,10 +62,12 @@ export class Pokemon extends Player {
 
     this.#totalLife = 100;
     this.#life = 100;
-    this.#damages = [];
 
     this.#configureEvents();
-    this.#handlePokemonPrimaryAttack();
+  }
+
+  get type() {
+    return this.#type;
   }
 
   get attacks() {
@@ -75,7 +75,7 @@ export class Pokemon extends Player {
   }
 
   get totalLife() {
-    return this.#life;
+    return this.#totalLife;
   }
 
   get life() {
@@ -83,14 +83,18 @@ export class Pokemon extends Player {
   }
 
   #configureEvents() {
-    this.events.on("damage", this.#handleDamage);
+    this.#scene.global.events.on(`damage_${this.id}`, this.#handleDamage, this);
   }
 
   #handleDamage(damage: Damage) {
-    const index = this.#damages.findIndex((dmg) => dmg.id === damage.id);
+    const isFromSameOrigin = damage.originId === this.id;
+    if (isFromSameOrigin) return;
+
+    const index = this.damages.findIndex((dmg) => dmg.id === damage.id);
+    console.log(index);
     if (index !== -1) return;
 
-    this.#damages.push(damage);
+    this.damages.push(damage);
     const newLife = (this.#life -= damage.damage);
     this.#life = newLife >= 0 ? newLife : 0;
     if (this.#life === 0) this.#handleDeath();
@@ -110,49 +114,38 @@ export class Pokemon extends Player {
       scene: this.#scene,
       position,
       direction: this.lookDirection,
+      originId: this.id,
       callback,
     });
 
     this.#attacks.add(attack);
   }
 
-  #handlePokemonPrimaryAttack() {
-    this.#scene.input.on("pointerdown", (pointer: Phaser.Input.Pointer) => {
-      this.freeze = true;
-      const lookDirection = Utils.getPointerDirectionInRelationTo(
-        {
-          x: pointer.worldX,
-          y: pointer.worldY,
-        },
-        {
-          x: this.gameObject.x,
-          y: this.gameObject.y,
-        }
-      );
+  primaryAttack(direction: ControllerKeysEnum) {
+    this.freeze = true;
 
-      let attackPosition: GamePosition = {
-        x: this.gameObject.body.x + this.gameObject.body.width / 2,
-        y: this.gameObject.body.y + this.gameObject.body.height / 2,
-      };
+    let attackPosition: GamePosition = {
+      x: this.gameObject.body.x + this.gameObject.body.width / 2,
+      y: this.gameObject.body.y + this.gameObject.body.height / 2,
+    };
 
-      switch (lookDirection) {
-        case ControllerKeysEnum.W:
-          attackPosition.y -= this.gameObject.body.height;
-          break;
-        case ControllerKeysEnum.D:
-          attackPosition.x += this.gameObject.body.width;
-          break;
-        case ControllerKeysEnum.A:
-          attackPosition.x -= this.gameObject.body.width;
-          break;
-        case ControllerKeysEnum.S:
-          attackPosition.y += this.gameObject.body.height;
-          break;
-      }
+    switch (direction) {
+      case ControllerKeysEnum.W:
+        attackPosition.y -= this.gameObject.body.height;
+        break;
+      case ControllerKeysEnum.D:
+        attackPosition.x += this.gameObject.body.width;
+        break;
+      case ControllerKeysEnum.A:
+        attackPosition.x -= this.gameObject.body.width;
+        break;
+      case ControllerKeysEnum.S:
+        attackPosition.y += this.gameObject.body.height;
+        break;
+    }
 
-      this.#createPrimaryAttack(attackPosition, (_sprite) => {
-        this.freeze = false;
-      });
+    this.#createPrimaryAttack(attackPosition, (_sprite) => {
+      this.freeze = false;
     });
   }
 }

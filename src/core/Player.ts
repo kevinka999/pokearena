@@ -1,3 +1,4 @@
+import { nanoid } from "nanoid";
 import { GameObjectConfig } from "../types/game";
 import { AnimationKeysEnums } from "../types/keys";
 import { ControllerKeysEnum } from "./Controller";
@@ -23,21 +24,21 @@ const animationMap: {
 };
 
 export class Player {
+  #id!: string;
   #scene: Phaser.Scene;
   #assetKey: string;
   #gameObject: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody;
   #idleFrameConfig: IdleFrameConfig;
   #lookDirection!: ControllerKeysEnum;
   #freeze!: boolean;
-  #events!: Phaser.Events.EventEmitter;
 
   constructor(params: PlayerParams) {
     this.#scene = params.scene;
-    this.#events = new Phaser.Events.EventEmitter();
     this.#idleFrameConfig = params.idleFrameConfig;
     this.#freeze = false;
     this.#assetKey = params.gameObjectConfig.assetKey;
     this.#lookDirection = params.facingDirection ?? ControllerKeysEnum.S;
+    this.#id = nanoid();
     this.#gameObject = this.#scene.physics.add
       .sprite(
         params.gameObjectConfig.position.x,
@@ -57,8 +58,8 @@ export class Player {
     }
   }
 
-  get events() {
-    return this.#events;
+  get id() {
+    return this.#id;
   }
 
   get gameObject() {

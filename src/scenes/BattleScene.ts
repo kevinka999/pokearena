@@ -1,8 +1,10 @@
 import { Background, Camera, Controller, Pokemon, Bot, Attack } from "../core";
-import { PokemonKeysEnums, SceneKeysEnums } from "../types/keys";
+import { Utils } from "../core/Utils";
+import { Chimchar } from "../pokemons";
+import { SceneKeysEnums } from "../types/keys";
 
 export class BattleScene extends Phaser.Scene {
-  #pokemon!: Pokemon;
+  #player!: Pokemon;
   #bot!: Bot;
   #controller!: Controller;
   #camera!: Camera;
@@ -21,24 +23,30 @@ export class BattleScene extends Phaser.Scene {
     this.#controller = new Controller({ scene: this });
     this.#background = new Background({ scene: this });
     const PlayerPokemon = this.global.getSelectedPokemonClass();
-    this.#pokemon = new PlayerPokemon({
+    this.#player = new PlayerPokemon({
       scene: this,
       level: 100,
     });
-    this.#bot = new Bot({
-      scene: this,
-      gameObjectConfig: {
-        position: { x: 0, y: 0 },
-        hitbox: [16, 16],
-        hitboxOffset: [8, 14],
-        assetKey: PokemonKeysEnums.CHIKORITA,
-        assetFrame: 7,
-        origin: [0.5, 0.5],
-      },
+
+    // handling player attack
+    this.input.on("pointerdown", (pointer: Phaser.Input.Pointer) => {
+      const lookDirection = Utils.getPointerDirectionInRelationTo(
+        {
+          x: pointer.worldX,
+          y: pointer.worldY,
+        },
+        {
+          x: this.#player.gameObject.x,
+          y: this.#player.gameObject.y,
+        }
+      );
+
+      this.#player.primaryAttack(lookDirection);
     });
+
     this.#camera = new Camera({
       scene: this,
-      followObject: this.#pokemon.gameObject,
+      followObject: this.#player.gameObject,
       bounds: [
         0,
         0,
@@ -46,26 +54,32 @@ export class BattleScene extends Phaser.Scene {
         this.#background.displayHeight,
       ],
     });
-    this.#background.setSpawnPoint(this.#pokemon.gameObject);
-    this.#background.setSpawnPoint(this.#bot.gameObject);
-    this.#background.addCollider(this.#pokemon.gameObject);
 
-    this.physics.add.collider(this.#pokemon.gameObject, this.#bot.gameObject);
+    //ading bot and collisions for it
+    this.#bot = new Bot(new Chimchar({ level: 1, scene: this }));
+
+    this.#background.setSpawnPoint(this.#player.gameObject);
+    this.#background.setSpawnPoint(this.#bot.pokemon.gameObject);
+    this.#background.addCollider(this.#player.gameObject);
+
+    this.physics.add.collider(
+      this.#player.gameObject,
+      this.#bot.pokemon.gameObject
+    );
     this.physics.add.overlap(
-      this.#pokemon.attacks,
-      this.#bot.gameObject,
+      this.#player.attacks,
+      this.#bot.pokemon.gameObject,
       (_botSprite, attackSprite) => {
         const attack = attackSprite as Attack;
-        this.#bot.events.emit("damage", {
+        this.global.events.emit(`damage_${this.#bot.pokemon.id}`, {
           id: attack.id,
           damage: attack.damage,
+          originId: attack.originId,
         });
-      },
-      undefined,
-      this.#bot.events
+      }
     );
 
-    this.registry.set("player", this.#pokemon);
+    this.registry.set("player", this.#player);
     this.registry.set("bot", this.#bot);
 
     this.scene.launch(SceneKeysEnums.BATTLE_HUD);
@@ -78,7 +92,7 @@ export class BattleScene extends Phaser.Scene {
       y: this.input.mousePointer.worldY,
     };
     const keysPressed = this.#controller.getKeysPressed();
-    this.#pokemon.movePlayer(keysPressed, pointer);
+    this.#player.movePlayer(keysPressed, pointer);
     this.#camera.handleMovingFollowOffset(keysPressed);
   }
 

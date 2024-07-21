@@ -1,6 +1,6 @@
 import { Scratch } from "../attacks/Scratch";
-import { Pokemon, PokemonTypes } from "../core";
-import { PlayerPokemonParams } from "../types/game";
+import { Pokemon } from "../core";
+import { PlayerPokemonParams, PokemonTypes } from "../types/game";
 import { PokemonKeysEnums } from "../types/keys";
 
 export class Totodile extends Pokemon {
