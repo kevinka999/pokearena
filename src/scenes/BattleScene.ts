@@ -78,6 +78,19 @@ export class BattleScene extends Phaser.Scene {
         });
       }
     );
+    this.physics.add.overlap(
+      this.#bot.pokemon.attacks,
+      this.#player.gameObject,
+      (_botSprite, attackSprite) => {
+        console.log("colision");
+        const attack = attackSprite as Attack;
+        this.global.events.emit(`damage_${this.#player.id}`, {
+          id: attack.id,
+          damage: attack.damage,
+          originId: attack.originId,
+        });
+      }
+    );
 
     this.registry.set("player", this.#player);
     this.registry.set("bot", this.#bot);
@@ -86,7 +99,7 @@ export class BattleScene extends Phaser.Scene {
     this.#background.turnOnDebugMode();
   }
 
-  update() {
+  update(timer: number) {
     const pointer = {
       x: this.input.mousePointer.worldX,
       y: this.input.mousePointer.worldY,
@@ -94,6 +107,8 @@ export class BattleScene extends Phaser.Scene {
     const keysPressed = this.#controller.getKeysPressed();
     this.#player.movePlayer(keysPressed, pointer);
     this.#camera.handleMovingFollowOffset(keysPressed);
+
+    this.#bot.handleAttack(timer);
   }
 
   #init() {
