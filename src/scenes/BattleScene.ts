@@ -82,7 +82,6 @@ export class BattleScene extends Phaser.Scene {
       this.#bot.pokemon.attacks,
       this.#player.gameObject,
       (_botSprite, attackSprite) => {
-        console.log("colision");
         const attack = attackSprite as Attack;
         this.global.events.emit(`damage_${this.#player.id}`, {
           id: attack.id,
@@ -100,12 +99,16 @@ export class BattleScene extends Phaser.Scene {
   }
 
   update(timer: number) {
-    const pointer = {
-      x: this.input.mousePointer.worldX,
-      y: this.input.mousePointer.worldY,
-    };
+    const pointer = this.cameras.main.getWorldPoint(
+      this.input.mousePointer.worldX,
+      this.input.mousePointer.worldY
+    );
+
     const keysPressed = this.#controller.getKeysPressed();
-    this.#player.movePlayer(keysPressed, pointer);
+    this.#player.movePlayer(keysPressed, {
+      x: pointer.x,
+      y: pointer.y,
+    });
     this.#camera.handleMovingFollowOffset(keysPressed);
 
     this.#bot.handleAttack(timer);
