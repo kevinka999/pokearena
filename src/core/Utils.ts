@@ -1,4 +1,4 @@
-import { GamePosition } from "../types/game";
+import { GamePosition, PokemonTypes } from "../types/game";
 import { ControllerKeysEnum } from "./Controller";
 
 export class Utils {
@@ -38,6 +38,20 @@ export class Utils {
         return 4.712;
       default:
         return undefined;
+    }
+  }
+
+  static getBackgroundColorFromTypes(pokeType: PokemonTypes[] | PokemonTypes) {
+    const type = Array.isArray(pokeType) ? pokeType[0] : pokeType;
+    switch (type) {
+      case PokemonTypes.FIRE:
+        return 0xf56642;
+      case PokemonTypes.GRASS:
+        return 0x76c765;
+      case PokemonTypes.WATER:
+        return 0x5a9fd1;
+      default:
+        return 0x60665f;
     }
   }
 }

@@ -6,17 +6,28 @@
     <title>Pokearena</title>
 
     <link rel="stylesheet" href="global.css" />
+
     <style type="text/css">
       @font-face {
-        font-family: "emerald";
-        src: url("./fonts/pokemon-emerald-pro.ttf") format("truetype");
-      }
-
-      @font-face {
-        font-family: "pkmnems";
-        src: url("./fonts/pkmnems.ttf") format("truetype");
+        font-family: "retro";
+        src: url("./fonts/retro.ttf") format("truetype");
       }
     </style>
+
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/webfont/1.6.28/webfontloader.js"
+      integrity="sha512-v/wOVTkoU7mXEJC3hXnw9AA6v32qzpknvuUF6J2Lbkasxaxn2nYcl+HGB7fr/kChGfCqubVr1n2sq1UFu3Gh1w=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+    <script>
+      WebFont.load({
+        custom: {
+          families: ["retro"],
+          urls: ["/fonts/retro.ttf"],
+        },
+      });
+    </script>
   </head>
   <body>
     <div id="main-container" class="container"></div>
