@@ -1,6 +1,6 @@
 import { Background, Camera, Controller, Pokemon, Bot, Attack } from "../core";
 import { Utils } from "../core/Utils";
-import { Chimchar } from "../pokemons";
+import { Squirtle } from "../pokemons";
 import { SceneKeysEnums } from "../types/keys";
 
 export class BattleScene extends Phaser.Scene {
@@ -56,7 +56,7 @@ export class BattleScene extends Phaser.Scene {
     });
 
     //ading bot and collisions for it
-    this.#bot = new Bot(new Chimchar({ level: 1, scene: this }));
+    this.#bot = new Bot(new Squirtle({ level: 1, scene: this }));
 
     this.#background.setSpawnPoint(this.#player.gameObject);
     this.#background.setSpawnPoint(this.#bot.pokemon.gameObject);

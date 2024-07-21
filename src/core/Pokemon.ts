@@ -37,7 +37,7 @@ export class Pokemon extends Player {
   #attacks: Phaser.Physics.Arcade.Group;
   #totalLife!: number;
   #life!: number;
-  damages: Damage[] = [];
+  #damages: Damage[] = [];
 
   constructor(
     pokemonParams: PokemonBaseParams,
@@ -82,6 +82,10 @@ export class Pokemon extends Player {
     return this.#life;
   }
 
+  get damages() {
+    return this.#damages;
+  }
+
   #configureEvents() {
     this.#scene.global.events.on(`damage_${this.id}`, this.#handleDamage, this);
   }
@@ -101,7 +105,8 @@ export class Pokemon extends Player {
   }
 
   #handleDeath() {
-    this.gameObject.destroy();
+    this.#life = this.#totalLife;
+    // this.gameObject.destroy();
   }
 
   #createPrimaryAttack(
