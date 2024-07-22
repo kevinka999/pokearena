@@ -96,6 +96,7 @@ export class HudScene extends Phaser.Scene {
     )
       .setScale(5)
       .setOrigin(0.4, 0.5);
+    sprite.play(`${key.toUpperCase()}_SELECTION_ANIM`);
 
     // mask is not related to container so it need to specify
     // the x and y of the starting container
