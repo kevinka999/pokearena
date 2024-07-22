@@ -12,7 +12,7 @@ export class Piplup extends Pokemon {
           primary: Scratch,
           secondary: Scratch,
         },
-        baseStatus: {
+        ivs: {
           HP: 53,
           ATTACK: 51,
           DEFENSE: 53,

@@ -12,7 +12,7 @@ export class Charmander extends Pokemon {
           primary: Scratch,
           secondary: Scratch,
         },
-        baseStatus: {
+        ivs: {
           HP: 39,
           ATTACK: 52,
           DEFENSE: 43,

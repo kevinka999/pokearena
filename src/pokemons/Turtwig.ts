@@ -12,7 +12,7 @@ export class Turtwig extends Pokemon {
           primary: Scratch,
           secondary: Scratch,
         },
-        baseStatus: {
+        ivs: {
           HP: 55,
           ATTACK: 68,
           DEFENSE: 64,

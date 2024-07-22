@@ -1,19 +1,21 @@
 import { AnimationConfig, GamePosition } from "../types/game";
-import { AttacksKeysEnums, DataKeysEnums } from "../types/keys";
+import {
+  AttacksKeysEnums,
+  AttackTypesEnum,
+  DataKeysEnums,
+  PokemonStatus,
+} from "../types/keys";
 import { ControllerKeysEnum } from "./Controller";
 import { nanoid } from "nanoid";
 import { Utils } from "./Utils";
-
-export enum AttackTypesEnum {
-  PHYSICAL = "PHYSICAL",
-  SPECIAL = "SPECIAL",
-}
+import { GameMechanicUtils } from "./GameMechanicUtils";
 
 export type AttackBaseParams = {
   scene: Phaser.Scene;
   position: GamePosition;
   direction: ControllerKeysEnum;
   originId: string;
+  status: PokemonStatus;
   callback?: (sprite: Phaser.Physics.Arcade.Sprite) => void;
 };
 
@@ -26,13 +28,17 @@ type Params = {
 export class Attack extends Phaser.Physics.Arcade.Sprite {
   #id!: string;
   #originId!: string;
-  #damage!: number;
+  #baseDamage!: number;
+  #status!: PokemonStatus;
+  #type!: AttackTypesEnum;
 
   constructor(params: Params) {
     super(params.scene, params.position.x, params.position.y, params.spriteKey);
     this.#id = nanoid();
     this.#originId = params.originId;
-    this.#damage = params.damage;
+    this.#baseDamage = params.damage;
+    this.#status = params.status;
+    this.#type = params.type;
     this.visible = false;
     params.scene.add.existing(this);
     params.scene.physics.world.enableBody(this);
@@ -61,7 +67,11 @@ export class Attack extends Phaser.Physics.Arcade.Sprite {
   }
 
   get damage() {
-    return this.#damage;
+    return GameMechanicUtils.getAttackDamage(
+      this.#baseDamage,
+      this.#type,
+      this.#status
+    );
   }
 
   #setExternalConfiguration(key: AttacksKeysEnums) {

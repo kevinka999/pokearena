@@ -74,3 +74,17 @@ export enum SFXKeysEnums {
   SELECT = "SELECT",
   CONFIRM = "CONFIRM",
 }
+
+export type PokemonStatus = {
+  HP: number;
+  ATTACK: number;
+  SP_ATTACK: number;
+  DEFENSE: number;
+  SP_DEFENSE: number;
+  SPEED: number;
+};
+
+export enum AttackTypesEnum {
+  PHYSICAL = "PHYSICAL",
+  SPECIAL = "SPECIAL",
+}

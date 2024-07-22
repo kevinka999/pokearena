@@ -1,4 +1,5 @@
-import { Attack, AttackBaseParams, Pokemon, PokemonIvs } from "../core";
+import { Attack, AttackBaseParams, Pokemon } from "../core";
+import { PokemonStatus } from "./keys";
 
 export enum PokemonTypes {
   WATER = "water",
@@ -18,7 +19,7 @@ export type SpriteGameObject =
 export type PlayerPokemonParams = {
   scene: Phaser.Scene;
   level: number;
-  ivs?: PokemonIvs;
+  ivs?: PokemonStatus;
 };
 
 export interface IPlayerPokemon {

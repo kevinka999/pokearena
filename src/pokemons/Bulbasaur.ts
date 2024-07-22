@@ -12,7 +12,7 @@ export class Bulbasaur extends Pokemon {
           primary: Scratch,
           secondary: Scratch,
         },
-        baseStatus: {
+        ivs: {
           HP: 45,
           ATTACK: 49,
           DEFENSE: 49,

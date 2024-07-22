@@ -26,7 +26,7 @@ export class BattleScene extends Phaser.Scene {
     const PlayerPokemon = this.global.getSelectedPokemonClass();
     this.#player = new PlayerPokemon({
       scene: this,
-      level: 100,
+      level: 1,
     });
 
     // handling player attack
@@ -91,7 +91,7 @@ export class BattleScene extends Phaser.Scene {
     this.registry.set("bot", this.#bot);
 
     this.scene.launch(SceneKeysEnums.BATTLE_HUD);
-    this.#background.turnOnDebugMode();
+    // this.#background.turnOnDebugMode();
   }
 
   update(timer: number, delta: number) {

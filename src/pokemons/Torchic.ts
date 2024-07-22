@@ -12,7 +12,7 @@ export class Torchic extends Pokemon {
           primary: Scratch,
           secondary: Scratch,
         },
-        baseStatus: {
+        ivs: {
           HP: 45,
           ATTACK: 60,
           DEFENSE: 40,

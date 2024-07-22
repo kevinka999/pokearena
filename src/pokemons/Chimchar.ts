@@ -12,7 +12,7 @@ export class Chimchar extends Pokemon {
           primary: Scratch,
           secondary: Scratch,
         },
-        baseStatus: {
+        ivs: {
           HP: 44,
           ATTACK: 58,
           DEFENSE: 44,

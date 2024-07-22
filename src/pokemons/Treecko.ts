@@ -12,7 +12,7 @@ export class Treecko extends Pokemon {
           primary: Scratch,
           secondary: Scratch,
         },
-        baseStatus: {
+        ivs: {
           HP: 40,
           ATTACK: 45,
           DEFENSE: 35,

@@ -12,7 +12,7 @@ export class Mudkip extends Pokemon {
           primary: Scratch,
           secondary: Scratch,
         },
-        baseStatus: {
+        ivs: {
           HP: 50,
           ATTACK: 70,
           DEFENSE: 50,

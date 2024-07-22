@@ -1,5 +1,5 @@
-import { Attack, AttackBaseParams, AttackTypesEnum } from "../core/Attack";
-import { AttacksKeysEnums } from "../types/keys";
+import { Attack, AttackBaseParams } from "../core/Attack";
+import { AttacksKeysEnums, AttackTypesEnum } from "../types/keys";
 
 export class Scratch extends Attack {
   constructor(params: AttackBaseParams) {

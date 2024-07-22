@@ -12,7 +12,7 @@ export class Totodile extends Pokemon {
           primary: Scratch,
           secondary: Scratch,
         },
-        baseStatus: {
+        ivs: {
           HP: 50,
           ATTACK: 65,
           DEFENSE: 64,

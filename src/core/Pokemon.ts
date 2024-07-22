@@ -4,17 +4,10 @@ import {
   IPokemonAttack,
   PokemonTypes,
 } from "../types/game";
+import { PokemonStatus } from "../types/keys";
 import { ControllerKeysEnum } from "./Controller";
+import { GameMechanicUtils } from "./GameMechanicUtils";
 import { Player, PlayerParams } from "./Player";
-
-export type PokemonIvs = {
-  HP: number;
-  ATTACK: number;
-  SP_ATTACK: number;
-  DEFENSE: number;
-  SP_DEFENSE: number;
-  SPEED: number;
-};
 
 type Moveset = {
   primary: IPokemonAttack;
@@ -23,7 +16,7 @@ type Moveset = {
 
 export type PokemonBaseParams = {
   level: number;
-  baseStatus: PokemonIvs;
+  ivs: PokemonStatus;
   type: PokemonTypes[];
   moveset: Moveset;
 };
@@ -31,7 +24,8 @@ export type PokemonBaseParams = {
 export class Pokemon extends Player {
   #scene: Phaser.Scene;
   #level!: number;
-  #baseStatus!: PokemonIvs;
+  #ivs!: PokemonStatus;
+  #status!: PokemonStatus;
   #type!: PokemonTypes[];
   #moveset!: Moveset;
   #attacks: Phaser.Physics.Arcade.Group;
@@ -55,13 +49,15 @@ export class Pokemon extends Player {
 
     this.#scene = playerParams.scene;
     this.#level = pokemonParams.level;
-    this.#baseStatus = pokemonParams.baseStatus;
+    this.#ivs = pokemonParams.ivs;
     this.#type = pokemonParams.type;
     this.#moveset = pokemonParams.moveset;
     this.#attacks = this.#scene.physics.add.group();
 
-    this.#totalLife = 100;
-    this.#life = 100;
+    this.#status = GameMechanicUtils.getStatusFromLevel(this.#level, this.#ivs);
+    this.#totalLife = this.#status.HP;
+    this.#life = this.#status.HP;
+    console.log(this.#status.HP);
 
     this.#configureEvents();
   }
@@ -155,6 +151,7 @@ export class Pokemon extends Player {
       position,
       direction: this.lookDirection,
       originId: this.id,
+      status: this.#status,
       callback,
     });
 

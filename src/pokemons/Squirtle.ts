@@ -12,7 +12,7 @@ export class Squirtle extends Pokemon {
           primary: Scratch,
           secondary: Scratch,
         },
-        baseStatus: {
+        ivs: {
           HP: 44,
           ATTACK: 48,
           DEFENSE: 65,

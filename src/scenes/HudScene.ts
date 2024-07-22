@@ -1,4 +1,5 @@
 import { Bot, Pokemon, HealthBar } from "../core";
+import { GameMechanicUtils } from "../core/GameMechanicUtils";
 import { Utils } from "../core/Utils";
 import { GamePosition, PokemonTypes } from "../types/game";
 import { SceneKeysEnums } from "../types/keys";
@@ -110,7 +111,17 @@ export class HudScene extends Phaser.Scene {
   }
 
   update() {
-    this.#playerHealth.setLife(this.#player.life);
-    this.#botHealth.setLife(this.#bot.pokemon.life);
+    this.#playerHealth.setLife(
+      GameMechanicUtils.getLifePercentage(
+        this.#player.life,
+        this.#player.totalLife
+      )
+    );
+    this.#botHealth.setLife(
+      GameMechanicUtils.getLifePercentage(
+        this.#bot.pokemon.life,
+        this.#bot.pokemon.totalLife
+      )
+    );
   }
 }
