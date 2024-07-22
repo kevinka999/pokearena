@@ -95,13 +95,48 @@ export class Pokemon extends Player {
     if (isFromSameOrigin) return;
 
     const index = this.damages.findIndex((dmg) => dmg.id === damage.id);
-    console.log(index);
     if (index !== -1) return;
 
     this.damages.push(damage);
+    this.#displayDamage(damage.damage);
     const newLife = (this.#life -= damage.damage);
     this.#life = newLife >= 0 ? newLife : 0;
     if (this.#life === 0) this.#handleDeath();
+  }
+
+  #displayDamage(damageInfo: number) {
+    const bodyPosition: GamePosition = {
+      x: this.gameObject.body.x + this.gameObject.body.width / 2, // middle of the body
+      y: this.gameObject.body.y + 2, // 2px bellow the top of the sprite,
+    };
+    const text = this.#scene.add
+      .text(bodyPosition.x, bodyPosition.y, damageInfo.toString(), {
+        fontSize: 32,
+        color: "#eb4949",
+        fontFamily: "retro",
+      })
+      .setStroke("#000", 12)
+      .setOrigin(0.5)
+      .setScale(0.2);
+
+    this.#scene.tweens.add({
+      targets: text,
+      y: bodyPosition.y - 10,
+      duration: 500,
+      ease: Phaser.Math.Easing.Cubic.Out,
+      onComplete: function () {
+        this.scene.tweens.add({
+          targets: this.text,
+          alpha: { from: 1, to: 0 },
+          duration: 300,
+          ease: Phaser.Math.Easing.Cubic.Out,
+          onComplete: function () {
+            text.destroy();
+          },
+        });
+      },
+      callbackScope: { scene: this.#scene, text: text },
+    });
   }
 
   #handleDeath() {
