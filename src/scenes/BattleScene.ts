@@ -1,6 +1,7 @@
 import { Background, Camera, Controller, Pokemon, Bot, Attack } from "../core";
 import { Utils } from "../core/Utils";
 import { Squirtle } from "../pokemons";
+import { GamePosition } from "../types/game";
 import { SceneKeysEnums } from "../types/keys";
 
 export class BattleScene extends Phaser.Scene {
@@ -30,16 +31,11 @@ export class BattleScene extends Phaser.Scene {
 
     // handling player attack
     this.input.on("pointerdown", (pointer: Phaser.Input.Pointer) => {
-      const lookDirection = Utils.getPointerDirectionInRelationTo(
-        {
-          x: pointer.worldX,
-          y: pointer.worldY,
-        },
-        {
-          x: this.#player.gameObject.x,
-          y: this.#player.gameObject.y,
-        }
+      const vector = Utils.getVector(
+        { x: pointer.worldX, y: pointer.worldY },
+        { x: this.#player.gameObject.x, y: this.#player.gameObject.y }
       );
+      const lookDirection = Utils.getDirectionFromVector(vector);
 
       this.#player.primaryAttack(lookDirection);
     });
@@ -59,7 +55,7 @@ export class BattleScene extends Phaser.Scene {
     this.#bot = new Bot(new Squirtle({ level: 1, scene: this }));
 
     this.#background.setSpawnPoint(this.#player.gameObject);
-    this.#background.setSpawnPoint(this.#bot.pokemon.gameObject);
+    this.#bot.pokemon.gameObject.setPosition(250, 120);
     this.#background.addCollider(this.#player.gameObject);
 
     this.physics.add.collider(
@@ -98,20 +94,9 @@ export class BattleScene extends Phaser.Scene {
     this.#background.turnOnDebugMode();
   }
 
-  update(timer: number) {
-    const pointer = this.cameras.main.getWorldPoint(
-      this.input.mousePointer.worldX,
-      this.input.mousePointer.worldY
-    );
-
-    const keysPressed = this.#controller.getKeysPressed();
-    this.#player.movePlayer(keysPressed, {
-      x: pointer.x,
-      y: pointer.y,
-    });
-    this.#camera.handleMovingFollowOffset(keysPressed);
-
-    this.#bot.handleAttack(timer);
+  update(timer: number, delta: number) {
+    this.#handlePlayerActions();
+    this.#handleBotActions(timer);
   }
 
   #init() {
@@ -123,5 +108,31 @@ export class BattleScene extends Phaser.Scene {
     const scale = Math.min(scaleX, scaleY);
 
     this.cameras.main.setZoom(scale);
+  }
+
+  #handlePlayerActions() {
+    const pointer = this.cameras.main.getWorldPoint(
+      this.input.mousePointer.worldX,
+      this.input.mousePointer.worldY
+    );
+    const vector = Utils.getVector(
+      { x: pointer.x, y: pointer.y },
+      { x: this.#player.gameObject.x, y: this.#player.gameObject.y }
+    );
+    const lookDirection = Utils.getDirectionFromVector(vector);
+    const playerKeysPressed = this.#controller.getKeysPressed();
+
+    this.#player.movePlayer(playerKeysPressed, lookDirection);
+    this.#camera.handleMovingFollowOffset(playerKeysPressed);
+  }
+
+  #handleBotActions(timer: number) {
+    const targetPosition: GamePosition = {
+      x: this.#player.gameObject.x,
+      y: this.#player.gameObject.y,
+    };
+
+    this.#bot.handleMovement(targetPosition);
+    this.#bot.handleAttack(targetPosition, timer);
   }
 }

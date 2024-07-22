@@ -1,5 +1,6 @@
-import { ControllerKeysEnum } from "./Controller";
+import { GamePosition } from "../types/game";
 import { Pokemon } from "./Pokemon";
+import { Utils } from "./Utils";
 
 export class Bot {
   #pokemon: Pokemon;
@@ -14,10 +15,25 @@ export class Bot {
     return this.#pokemon;
   }
 
-  handleAttack(timer: number) {
+  handleAttack(target: GamePosition, timer: number) {
+    const vector = Utils.getVector(
+      { x: target.x, y: target.y },
+      { x: this.#pokemon.gameObject.x, y: this.#pokemon.gameObject.y }
+    );
+    const targetDirection = Utils.getDirectionFromVector(vector);
+
     if (timer > this.#previousAttackInterval + this.#attackInterval) {
       this.#previousAttackInterval = timer;
-      this.pokemon.primaryAttack(ControllerKeysEnum.A);
+      this.pokemon.primaryAttack(targetDirection);
     }
+  }
+
+  handleMovement(target: GamePosition) {
+    const vector = Utils.getVector(
+      { x: target.x, y: target.y },
+      { x: this.#pokemon.gameObject.x, y: this.#pokemon.gameObject.y }
+    );
+    const walkingDirection = Utils.getDirectionFromVector(vector);
+    this.#pokemon.movePlayer([walkingDirection], walkingDirection);
   }
 }

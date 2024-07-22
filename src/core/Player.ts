@@ -2,7 +2,6 @@ import { nanoid } from "nanoid";
 import { GameObjectConfig } from "../types/game";
 import { AnimationKeysEnums } from "../types/keys";
 import { ControllerKeysEnum } from "./Controller";
-import { Utils } from "./Utils";
 
 type IdleFrameConfig = { [key in ControllerKeysEnum]?: number };
 
@@ -76,14 +75,10 @@ export class Player {
 
   movePlayer(
     moveDirections: ControllerKeysEnum[],
-    pointer: { x: number; y: number }
+    lookDirection: ControllerKeysEnum
   ) {
     this.#handleMovement(moveDirections);
 
-    const lookDirection = Utils.getPointerDirectionInRelationTo(pointer, {
-      x: this.gameObject.x,
-      y: this.gameObject.y,
-    });
     const isMoving = moveDirections.length > 0;
     this.#handleLookDirection(lookDirection, isMoving);
   }

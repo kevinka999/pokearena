@@ -2,11 +2,17 @@ import { GamePosition, PokemonTypes } from "../types/game";
 import { ControllerKeysEnum } from "./Controller";
 
 export class Utils {
-  static getPointerDirectionInRelationTo(
-    pointer: GamePosition,
-    object: GamePosition
-  ) {
-    const pointerAngle = Math.atan2(pointer.y - object.y, pointer.x - object.x);
+  static getVector(positionA: GamePosition, positionB: GamePosition) {
+    let direction = new Phaser.Math.Vector2(
+      positionA.x - positionB.x,
+      positionA.y - positionB.y
+    );
+    direction.normalize();
+    return direction;
+  }
+
+  static getDirectionFromVector(vector: Phaser.Math.Vector2) {
+    const pointerAngle = Math.atan2(vector.y, vector.x);
     const angleInDegrees = Math.round(
       (Phaser.Math.RadToDeg(pointerAngle) + 360) % 360
     );
