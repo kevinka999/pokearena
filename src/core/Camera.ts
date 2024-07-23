@@ -3,7 +3,7 @@ import { ControllerKeysEnum } from "./Controller";
 
 type Bounds = Parameters<Phaser.Cameras.Scene2D.BaseCamera["setBounds"]>;
 
-type ControllerParams = {
+type CameraParams = {
   scene: Phaser.Scene;
   followObject?: Phaser.GameObjects.Sprite;
   bounds?: Bounds;
@@ -18,7 +18,7 @@ export class Camera {
   #offsetDistancePx = 20;
   #timeToOffsetMs = 500;
 
-  constructor(params: ControllerParams) {
+  constructor(params: CameraParams) {
     this.#scene = params.scene;
     this.#lastFollowOffsetToGo = { x: 0, y: 0 };
 
@@ -42,6 +42,10 @@ export class Camera {
       this.#lastFollowOffsetToGo = offsetToGo;
       this.#handleTween(offsetToGo);
     }
+  }
+
+  setFollowObject(object: Phaser.GameObjects.Sprite) {
+    this.#scene.cameras.main.startFollow(object);
   }
 
   #handleTween(offsetToGo: FollowOffset) {
