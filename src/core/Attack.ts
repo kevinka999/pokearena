@@ -20,7 +20,7 @@ export type AttackBaseParams = {
 };
 
 type Params = {
-  spriteKey: string;
+  spriteKey: string[] | string;
   type: AttackTypesEnum;
   damage: number;
 } & AttackBaseParams;
@@ -33,7 +33,11 @@ export class Attack extends Phaser.Physics.Arcade.Sprite {
   #type!: AttackTypesEnum;
 
   constructor(params: Params) {
-    super(params.scene, params.position.x, params.position.y, params.spriteKey);
+    const spriteKey = Array.isArray(params.spriteKey)
+      ? params.spriteKey[Phaser.Math.Between(0, params.spriteKey.length - 1)]
+      : params.spriteKey;
+
+    super(params.scene, params.position.x, params.position.y, spriteKey);
     this.#id = nanoid();
     this.#originId = params.originId;
     this.#baseDamage = params.damage;
@@ -43,11 +47,11 @@ export class Attack extends Phaser.Physics.Arcade.Sprite {
     params.scene.add.existing(this);
     params.scene.physics.world.enableBody(this);
 
-    this.#setExternalConfiguration(params.spriteKey as AttacksKeysEnums);
+    this.#setExternalConfiguration(spriteKey as AttacksKeysEnums);
     this.rotation = Utils.getRadiansFromDirection(params.direction) ?? 0;
 
     this.visible = true;
-    this.play(`${params.spriteKey}_ANIM`);
+    this.play(`${spriteKey}_ANIM`);
     this.on(
       "animationcomplete",
       function (_anim: any, _frame: any, sprite: Attack) {
