@@ -20,11 +20,10 @@ export class Bot {
       { x: target.x, y: target.y },
       { x: this.#pokemon.gameObject.x, y: this.#pokemon.gameObject.y }
     );
-    const targetDirection = Utils.getDirectionFromVector(vector);
 
     if (timer > this.#previousAttackInterval + this.#attackInterval) {
       this.#previousAttackInterval = timer;
-      this.pokemon.primaryAttack(targetDirection);
+      this.pokemon.primaryAttack(vector);
     }
   }
 

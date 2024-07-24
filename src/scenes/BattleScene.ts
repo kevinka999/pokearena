@@ -68,9 +68,8 @@ export class BattleScene extends Phaser.Scene {
         { x: pointer.worldX, y: pointer.worldY },
         { x: this.#player.gameObject.x, y: this.#player.gameObject.y }
       );
-      const lookDirection = Utils.getDirectionFromVector(vector);
 
-      this.#player.primaryAttack(lookDirection);
+      this.#player.primaryAttack(vector);
     });
 
     this.#background.setSpawnPoint(this.#player.gameObject);

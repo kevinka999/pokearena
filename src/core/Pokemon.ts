@@ -158,28 +158,19 @@ export class Pokemon extends Player {
     this.#attacks.add(attack);
   }
 
-  primaryAttack(direction: ControllerKeysEnum) {
+  primaryAttack(direction: Phaser.Math.Vector2) {
     this.freeze = true;
 
-    let attackPosition: GamePosition = {
-      x: this.gameObject.body.x + this.gameObject.body.width / 2,
-      y: this.gameObject.body.y + this.gameObject.body.height / 2,
-    };
-
-    switch (direction) {
-      case ControllerKeysEnum.W:
-        attackPosition.y -= this.gameObject.body.height;
-        break;
-      case ControllerKeysEnum.D:
-        attackPosition.x += this.gameObject.body.width;
-        break;
-      case ControllerKeysEnum.A:
-        attackPosition.x -= this.gameObject.body.width;
-        break;
-      case ControllerKeysEnum.S:
-        attackPosition.y += this.gameObject.body.height;
-        break;
-    }
+    const attackPosition = new Phaser.Math.Vector2(
+      this.gameObject.body.x + this.gameObject.body.width / 2,
+      this.gameObject.body.y + this.gameObject.body.height / 2
+    );
+    attackPosition.add(
+      new Phaser.Math.Vector2(
+        direction.x * this.gameObject.body.width,
+        direction.y * this.gameObject.body.height
+      )
+    );
 
     this.#createPrimaryAttack(attackPosition, (_sprite) => {
       this.freeze = false;
