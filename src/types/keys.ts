@@ -42,7 +42,11 @@ export enum PokemonKeysEnums {
 }
 
 export enum AttacksKeysEnums {
-  SCRATCH = "SCRATCH",
+  SCRATCH_1 = "SCRATCH_1",
+  SCRATCH_2 = "SCRATCH_2",
+  SCRATCH_3 = "SCRATCH_3",
+  SCRATCH_4 = "SCRATCH_4",
+  SCRATCH_5 = "SCRATCH_5",
 }
 
 export enum MapKeysEnums {

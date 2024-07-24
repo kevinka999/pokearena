@@ -1,119 +1,119 @@
 {
   "frames": {
-    "doublescratch-2.png": {
+    "scratch_1_02.png": {
+      "frame": {
+        "x": 47,
+        "y": 17,
+        "w": 37,
+        "h": 33
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 13,
+        "y": 1,
+        "w": 37,
+        "h": 33
+      },
+      "sourceSize": {
+        "w": 64,
+        "h": 48
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "scratch_1_01.png": {
+      "frame": {
+        "x": 0,
+        "y": 25,
+        "w": 9,
+        "h": 11
+      },
+      "rotated": true,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 8,
+        "y": 5,
+        "w": 9,
+        "h": 11
+      },
+      "sourceSize": {
+        "w": 64,
+        "h": 48
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "scratch_1_03.png": {
       "frame": {
         "x": 0,
         "y": 0,
-        "w": 27,
-        "h": 37
-      },
-      "rotated": false,
-      "trimmed": true,
-      "spriteSourceSize": {
-        "x": 41,
-        "y": 34,
-        "w": 27,
-        "h": 37
-      },
-      "sourceSize": {
-        "w": 96,
-        "h": 96
-      },
-      "pivot": {
-        "x": 0.5,
-        "y": 0.5
-      }
-    },
-    "doublescratch-3.png": {
-      "frame": {
-        "x": 0,
-        "y": 37,
-        "w": 22,
-        "h": 31
-      },
-      "rotated": false,
-      "trimmed": true,
-      "spriteSourceSize": {
-        "x": 42,
-        "y": 31,
-        "w": 22,
-        "h": 31
-      },
-      "sourceSize": {
-        "w": 96,
-        "h": 96
-      },
-      "pivot": {
-        "x": 0.5,
-        "y": 0.5
-      }
-    },
-    "doublescratch-1.png": {
-      "frame": {
-        "x": 0,
-        "y": 68,
-        "w": 26,
-        "h": 29
-      },
-      "rotated": false,
-      "trimmed": true,
-      "spriteSourceSize": {
-        "x": 39,
-        "y": 39,
-        "w": 26,
-        "h": 29
-      },
-      "sourceSize": {
-        "w": 96,
-        "h": 96
-      },
-      "pivot": {
-        "x": 0.5,
-        "y": 0.5
-      }
-    },
-    "doublescratch-4.png": {
-      "frame": {
-        "x": 22,
-        "y": 37,
-        "w": 19,
+        "w": 47,
         "h": 25
       },
       "rotated": false,
       "trimmed": true,
       "spriteSourceSize": {
-        "x": 42,
-        "y": 34,
-        "w": 19,
+        "x": 2,
+        "y": 8,
+        "w": 47,
         "h": 25
       },
       "sourceSize": {
-        "w": 96,
-        "h": 96
+        "w": 64,
+        "h": 48
       },
       "pivot": {
         "x": 0.5,
         "y": 0.5
       }
     },
-    "doublescratch-0.png": {
+    "scratch_1_04.png": {
       "frame": {
-        "x": 27,
+        "x": 47,
         "y": 0,
-        "w": 16,
+        "w": 45,
         "h": 17
       },
       "rotated": false,
       "trimmed": true,
       "spriteSourceSize": {
-        "x": 42,
-        "y": 44,
-        "w": 16,
+        "x": 0,
+        "y": 16,
+        "w": 45,
         "h": 17
       },
       "sourceSize": {
-        "w": 96,
-        "h": 96
+        "w": 64,
+        "h": 48
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "scratch_1_05.png": {
+      "frame": {
+        "x": 92,
+        "y": 0,
+        "w": 42,
+        "h": 19
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 2,
+        "y": 14,
+        "w": 42,
+        "h": 19
+      },
+      "sourceSize": {
+        "w": 64,
+        "h": 48
       },
       "pivot": {
         "x": 0.5,
@@ -124,11 +124,11 @@
   "meta": {
     "app": "http://free-tex-packer.com",
     "version": "0.6.7",
-    "image": "doublescratch.png",
+    "image": "texture.png",
     "format": "RGBA8888",
     "size": {
-      "w": 43,
-      "h": 97
+      "w": 134,
+      "h": 50
     },
     "scale": 1
   }

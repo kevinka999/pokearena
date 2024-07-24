@@ -151,7 +151,8 @@ export class PreloadScene extends Phaser.Scene {
       this.anims.create({
         key: `${attackKey.toUpperCase()}_ANIM`,
         frames: this.anims.generateFrameNames(`${attackKey.toUpperCase()}`, {
-          prefix: `${animationData?.key.toLowerCase()}-`,
+          prefix: `${animationData?.key.toLowerCase()}_`,
+          zeroPad: 2,
           suffix: ".png",
           start: animationData?.start,
           end: animationData?.end,
@@ -160,6 +161,7 @@ export class PreloadScene extends Phaser.Scene {
         repeat: animationData?.repeat ?? 0,
         delay: animationData?.delay ?? 0,
         yoyo: animationData?.yoyo ?? false,
+        duration: 2000,
       });
     }
   }

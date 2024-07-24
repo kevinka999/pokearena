@@ -6,7 +6,7 @@ export class Scratch extends Attack {
     super({
       ...params,
       damage: 40,
-      spriteKey: AttacksKeysEnums.SCRATCH,
+      spriteKey: AttacksKeysEnums.SCRATCH_1,
       type: AttackTypesEnum.PHYSICAL,
     });
   }
