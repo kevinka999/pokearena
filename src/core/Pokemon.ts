@@ -142,14 +142,14 @@ export class Pokemon extends Player {
 
   #createPrimaryAttack(
     position: GamePosition,
+    direction: Phaser.Math.Vector2,
     callback?: (sprite: Phaser.Physics.Arcade.Sprite) => void
   ) {
     if (this.#attacks?.getLength() > 0) return;
-
     const attack = new this.#moveset.primary({
       scene: this.#scene,
       position,
-      direction: this.lookDirection,
+      direction: direction,
       originId: this.id,
       status: this.#status,
       callback,
@@ -172,7 +172,7 @@ export class Pokemon extends Player {
       )
     );
 
-    this.#createPrimaryAttack(attackPosition, (_sprite) => {
+    this.#createPrimaryAttack(attackPosition, direction, (_sprite) => {
       this.freeze = false;
     });
   }

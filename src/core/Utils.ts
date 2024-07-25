@@ -2,7 +2,10 @@ import { GamePosition, PokemonTypes } from "../types/game";
 import { ControllerKeysEnum } from "./Controller";
 
 export class Utils {
-  static getVector(positionA: GamePosition, positionB: GamePosition) {
+  static getVectorDirection(
+    positionA: GamePosition,
+    positionB: GamePosition
+  ): Phaser.Math.Vector2 {
     let direction = new Phaser.Math.Vector2(
       positionA.x - positionB.x,
       positionA.y - positionB.y
@@ -11,12 +14,15 @@ export class Utils {
     return direction;
   }
 
-  static getDirectionFromVector(vector: Phaser.Math.Vector2) {
+  static getAngleDegressFromDirection(vector: Phaser.Math.Vector2): number {
     const pointerAngle = Math.atan2(vector.y, vector.x);
-    const angleInDegrees = Math.round(
-      (Phaser.Math.RadToDeg(pointerAngle) + 360) % 360
-    );
+    return Math.round((Phaser.Math.RadToDeg(pointerAngle) + 360) % 360);
+  }
 
+  static getControllerDirectionFromVector(
+    vector: Phaser.Math.Vector2
+  ): ControllerKeysEnum {
+    const angleInDegrees = this.getAngleDegressFromDirection(vector);
     if (angleInDegrees >= 315 || angleInDegrees <= 45) {
       return ControllerKeysEnum.D;
     } else if (angleInDegrees >= 46 && angleInDegrees <= 135) {

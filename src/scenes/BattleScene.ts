@@ -64,7 +64,7 @@ export class BattleScene extends Phaser.Scene {
     });
 
     this.input.on("pointerdown", (pointer: Phaser.Input.Pointer) => {
-      const vector = Utils.getVector(
+      const vector = Utils.getVectorDirection(
         { x: pointer.worldX, y: pointer.worldY },
         { x: this.#player.gameObject.x, y: this.#player.gameObject.y }
       );
@@ -123,11 +123,11 @@ export class BattleScene extends Phaser.Scene {
       this.input.mousePointer.worldX,
       this.input.mousePointer.worldY
     );
-    const vector = Utils.getVector(
+    const vector = Utils.getVectorDirection(
       { x: pointer.x, y: pointer.y },
       { x: this.#player.gameObject.x, y: this.#player.gameObject.y }
     );
-    const lookDirection = Utils.getDirectionFromVector(vector);
+    const lookDirection = Utils.getControllerDirectionFromVector(vector);
     const playerKeysPressed = this.#controller.getKeysPressed();
 
     this.#player.movePlayer(playerKeysPressed, lookDirection);

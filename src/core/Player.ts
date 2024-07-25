@@ -1,6 +1,6 @@
 import { nanoid } from "nanoid";
 import { GameObjectConfig } from "../types/game";
-import { AnimationKeysEnums } from "../types/keys";
+import { AnimationKeysEnums, DepthEnum } from "../types/keys";
 import { ControllerKeysEnum } from "./Controller";
 
 type IdleFrameConfig = { [key in ControllerKeysEnum]?: number };
@@ -51,6 +51,7 @@ export class Player {
     this.#gameObject.body.setCollideWorldBounds(true);
     this.#gameObject.setPushable(false);
     this.#scene.physics.add.existing(this.gameObject, false);
+    this.#gameObject.setDepth(DepthEnum.PLAYER);
 
     if (params.gameObjectConfig.origin !== undefined) {
       this.gameObject.setOrigin(...params.gameObjectConfig.origin);

@@ -3,9 +3,9 @@ import {
   AttacksKeysEnums,
   AttackTypesEnum,
   DataKeysEnums,
+  DepthEnum,
   PokemonStatus,
 } from "../types/keys";
-import { ControllerKeysEnum } from "./Controller";
 import { nanoid } from "nanoid";
 import { Utils } from "./Utils";
 import { GameMechanicUtils } from "./GameMechanicUtils";
@@ -13,7 +13,7 @@ import { GameMechanicUtils } from "./GameMechanicUtils";
 export type AttackBaseParams = {
   scene: Phaser.Scene;
   position: GamePosition;
-  direction: ControllerKeysEnum;
+  direction: Phaser.Math.Vector2;
   originId: string;
   status: PokemonStatus;
   callback?: (sprite: Phaser.Physics.Arcade.Sprite) => void;
@@ -44,12 +44,14 @@ export class Attack extends Phaser.Physics.Arcade.Sprite {
     this.#status = params.status;
     this.#type = params.type;
     this.visible = false;
+    this.setDepth(DepthEnum.ATTACK);
     params.scene.add.existing(this);
     params.scene.physics.world.enableBody(this);
 
     this.#setExternalConfiguration(spriteKey as AttacksKeysEnums);
-    this.rotation = Utils.getRadiansFromDirection(params.direction) ?? 0;
-
+    this.rotation = Phaser.Math.DegToRad(
+      Utils.getAngleDegressFromDirection(params.direction)
+    );
     this.visible = true;
     this.play(`${spriteKey}_ANIM`);
     this.on(

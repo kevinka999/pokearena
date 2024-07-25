@@ -1,5 +1,5 @@
 import { SpriteGameObject } from "../types/game";
-import { MapKeysEnums } from "../types/keys";
+import { DepthEnum, MapKeysEnums } from "../types/keys";
 
 export type BackgroundParams = {
   scene: Phaser.Scene;
@@ -111,12 +111,16 @@ export class Background {
   }
 
   #configLayers() {
+    const backgroundLayer = this.#layers[LayersEnum.BACKGROUND];
+    backgroundLayer.setDepth(DepthEnum.BACKGROUND);
+
     const collisionLayer = this.#layers[LayersEnum.COLLISION];
     collisionLayer.setCollisionByProperty({ collides: true });
     collisionLayer.setCollisionBetween(1, this.#tileset.total);
+    collisionLayer.setDepth(DepthEnum.COLLISION);
 
-    const foreground = this.#layers[LayersEnum.FOREGROUND];
-    foreground.setDepth(99);
+    const foregroundLayer = this.#layers[LayersEnum.FOREGROUND];
+    foregroundLayer.setDepth(DepthEnum.FOREGROUND);
   }
 
   #setBounds() {

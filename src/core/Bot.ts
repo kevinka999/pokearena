@@ -16,7 +16,7 @@ export class Bot {
   }
 
   handleAttack(target: GamePosition, timer: number) {
-    const vector = Utils.getVector(
+    const vector = Utils.getVectorDirection(
       { x: target.x, y: target.y },
       { x: this.#pokemon.gameObject.x, y: this.#pokemon.gameObject.y }
     );
@@ -28,11 +28,11 @@ export class Bot {
   }
 
   handleMovement(target: GamePosition) {
-    const vector = Utils.getVector(
+    const vector = Utils.getVectorDirection(
       { x: target.x, y: target.y },
       { x: this.#pokemon.gameObject.x, y: this.#pokemon.gameObject.y }
     );
-    const walkingDirection = Utils.getDirectionFromVector(vector);
+    const walkingDirection = Utils.getControllerDirectionFromVector(vector);
     this.#pokemon.movePlayer([walkingDirection], walkingDirection);
   }
 }

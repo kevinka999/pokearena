@@ -92,3 +92,11 @@ export enum AttackTypesEnum {
   PHYSICAL = "PHYSICAL",
   SPECIAL = "SPECIAL",
 }
+
+export enum DepthEnum {
+  BACKGROUND = 0,
+  FOREGROUND = 99,
+  COLLISION = 1,
+  PLAYER = 5,
+  ATTACK = 6,
+}
