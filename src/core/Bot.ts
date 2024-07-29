@@ -23,7 +23,7 @@ export class Bot {
 
     if (timer > this.#previousAttackInterval + this.#attackInterval) {
       this.#previousAttackInterval = timer;
-      this.pokemon.primaryAttack(vector);
+      this.pokemon.primaryAttack(timer, vector);
     }
   }
 

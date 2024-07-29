@@ -21,6 +21,16 @@ export type PokemonBaseParams = {
   moveset: Moveset;
 };
 
+export enum ColldownEnum {
+  PRIMARY_ATTACK = "PRIMARY_ATTACK",
+  DASH = "DASH",
+}
+
+const COOLDOWN_MAPPER: Record<ColldownEnum, number> = {
+  DASH: 5000,
+  PRIMARY_ATTACK: 1000,
+};
+
 export class Pokemon extends Player {
   #scene: Phaser.Scene;
   #level!: number;
@@ -32,6 +42,7 @@ export class Pokemon extends Player {
   #totalLife!: number;
   #life!: number;
   #damages: Damage[] = [];
+  #cooldown: Map<ColldownEnum, number> = new Map();
 
   constructor(
     pokemonParams: PokemonBaseParams,
@@ -145,7 +156,6 @@ export class Pokemon extends Player {
     direction: Phaser.Math.Vector2,
     callback?: (sprite: Phaser.Physics.Arcade.Sprite) => void
   ) {
-    if (this.#attacks?.getLength() > 0) return;
     const attack = new this.#moveset.primary({
       scene: this.#scene,
       position,
@@ -158,8 +168,9 @@ export class Pokemon extends Player {
     this.#attacks.add(attack);
   }
 
-  primaryAttack(direction: Phaser.Math.Vector2) {
-    this.freeze = true;
+  primaryAttack(timer: number, direction: Phaser.Math.Vector2) {
+    const isCooldown = this.#cooldown.get(ColldownEnum.PRIMARY_ATTACK);
+    if (isCooldown) return;
 
     const attackPosition = new Phaser.Math.Vector2(
       this.gameObject.body.x + this.gameObject.body.width / 2,
@@ -172,8 +183,97 @@ export class Pokemon extends Player {
       )
     );
 
+    this.freeze = true;
+    this.#cooldown.set(ColldownEnum.PRIMARY_ATTACK, timer);
     this.#createPrimaryAttack(attackPosition, direction, (_sprite) => {
       this.freeze = false;
     });
+  }
+
+  dash(timer: number, directions: ControllerKeysEnum[]) {
+    if (
+      !directions.includes(ControllerKeysEnum.SHIFT) ||
+      !directions.some((direction) =>
+        [
+          ControllerKeysEnum.A,
+          ControllerKeysEnum.D,
+          ControllerKeysEnum.S,
+          ControllerKeysEnum.W,
+        ].includes(direction)
+      )
+    )
+      return;
+
+    const isCooldown = this.#cooldown.get(ColldownEnum.DASH);
+    if (isCooldown) return;
+
+    this.#cooldown.set(ColldownEnum.DASH, timer);
+    this.freeze = true;
+    if (directions.includes(ControllerKeysEnum.A)) {
+      this.#scene.tweens.add({
+        targets: { velocity: 0 },
+        velocity: -300,
+        duration: 200,
+        ease: Phaser.Math.Easing.Cubic.Out,
+        onUpdate: (_tween, target) => {
+          this.gameObject.body.setVelocityX(target.velocity);
+        },
+        onComplete: () => {
+          this.freeze = false;
+        },
+        callbackScope: this,
+      });
+    } else if (directions.includes(ControllerKeysEnum.D)) {
+      this.#scene.tweens.add({
+        targets: { velocity: 0 },
+        velocity: 300,
+        duration: 200,
+        ease: Phaser.Math.Easing.Cubic.Out,
+        onUpdate: (_tween, target) => {
+          this.gameObject.body.setVelocityX(target.velocity);
+        },
+        onComplete: () => {
+          this.freeze = false;
+        },
+        callbackScope: this,
+      });
+    } else if (directions.includes(ControllerKeysEnum.W)) {
+      this.#scene.tweens.add({
+        targets: { velocity: 0 },
+        velocity: -300,
+        duration: 200,
+        ease: Phaser.Math.Easing.Cubic.Out,
+        onUpdate: (_tween, target) => {
+          this.gameObject.body.setVelocityY(target.velocity);
+        },
+        onComplete: () => {
+          this.freeze = false;
+        },
+        callbackScope: this,
+      });
+    } else if (directions.includes(ControllerKeysEnum.S)) {
+      this.#scene.tweens.add({
+        targets: { velocity: 0 },
+        velocity: 300,
+        duration: 200,
+        ease: Phaser.Math.Easing.Cubic.Out,
+        onUpdate: (_tween, target) => {
+          this.gameObject.body.setVelocityY(target.velocity);
+        },
+        onComplete: () => {
+          this.freeze = false;
+        },
+        callbackScope: this,
+      });
+    }
+  }
+
+  handleCooldown(timer: number) {
+    for (const [key, timeOfSkillUsed] of this.#cooldown.entries()) {
+      const cooldown = COOLDOWN_MAPPER[key];
+      if (timer && timer >= timeOfSkillUsed + cooldown) {
+        this.#cooldown.delete(key);
+      }
+    }
   }
 }

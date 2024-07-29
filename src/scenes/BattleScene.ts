@@ -30,7 +30,7 @@ export class BattleScene extends Phaser.Scene {
   }
 
   update(timer: number, delta: number) {
-    this.#handlePlayerActions();
+    this.#handlePlayerActions(timer);
     this.#handleBotActions(timer);
   }
 
@@ -69,7 +69,7 @@ export class BattleScene extends Phaser.Scene {
         { x: this.#player.gameObject.x, y: this.#player.gameObject.y }
       );
 
-      this.#player.primaryAttack(vector);
+      this.#player.primaryAttack(this.time.now, vector);
     });
 
     this.#background.setSpawnPoint(this.#player.gameObject);
@@ -118,7 +118,7 @@ export class BattleScene extends Phaser.Scene {
     );
   }
 
-  #handlePlayerActions() {
+  #handlePlayerActions(timer: number) {
     const pointer = this.cameras.main.getWorldPoint(
       this.input.mousePointer.worldX,
       this.input.mousePointer.worldY
@@ -130,6 +130,8 @@ export class BattleScene extends Phaser.Scene {
     const lookDirection = Utils.getControllerDirectionFromVector(vector);
     const playerKeysPressed = this.#controller.getKeysPressed();
 
+    this.#player.handleCooldown(timer);
+    this.#player.dash(timer, playerKeysPressed);
     this.#player.movePlayer(playerKeysPressed, lookDirection);
     this.#camera.handleMovingFollowOffset(playerKeysPressed);
   }

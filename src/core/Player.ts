@@ -70,6 +70,10 @@ export class Player {
     return this.#lookDirection;
   }
 
+  get freeze() {
+    return this.freeze;
+  }
+
   set freeze(value: boolean) {
     this.#freeze = value;
   }

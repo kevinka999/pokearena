@@ -4,6 +4,7 @@ export enum ControllerKeysEnum {
   A = "A",
   S = "S",
   SPACE = "SPACE",
+  SHIFT = "SHIFT",
 }
 
 type ControllerParams = {
@@ -26,6 +27,7 @@ export class Controller {
       [ControllerKeysEnum.A]: Phaser.Input.Keyboard.KeyCodes.A,
       [ControllerKeysEnum.D]: Phaser.Input.Keyboard.KeyCodes.D,
       [ControllerKeysEnum.SPACE]: Phaser.Input.Keyboard.KeyCodes.SPACE,
+      [ControllerKeysEnum.SHIFT]: Phaser.Input.Keyboard.KeyCodes.SHIFT,
     }) as Controllers;
   }
 
@@ -38,6 +40,8 @@ export class Controller {
     if (this.#controller.S.isDown) keysPressed.push(ControllerKeysEnum.S);
     if (this.#controller.SPACE.isDown)
       keysPressed.push(ControllerKeysEnum.SPACE);
+    if (this.#controller.SHIFT.isDown)
+      keysPressed.push(ControllerKeysEnum.SHIFT);
 
     return keysPressed;
   }
