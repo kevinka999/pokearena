@@ -49,6 +49,10 @@ export enum AttacksKeysEnums {
   SCRATCH_5 = "SCRATCH_5",
 }
 
+export enum AbilitiesKeysEnum {
+  DASH = "DASH",
+}
+
 export enum MapKeysEnums {
   TILESET = "TILESET",
   MAPCONFIG = "MAPCONFIG",
@@ -95,6 +99,7 @@ export enum AttackTypesEnum {
 
 export enum DepthEnum {
   BACKGROUND = 0,
+  DASH = 5,
   FOREGROUND = 99,
   COLLISION = 1,
   PLAYER = 5,

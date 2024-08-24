@@ -6,3 +6,4 @@ export * from "./Pokemon";
 export * from "./Attack";
 export * from "./Bot";
 export * from "./HealthBar";
+export * from "./Dash";

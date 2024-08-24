@@ -15,6 +15,13 @@ type Controllers = {
   [key in ControllerKeysEnum]: Phaser.Input.Keyboard.Key;
 };
 
+export const movimentationDirections = [
+  ControllerKeysEnum.A,
+  ControllerKeysEnum.D,
+  ControllerKeysEnum.S,
+  ControllerKeysEnum.W,
+];
+
 export class Controller {
   #scene: Phaser.Scene;
   #controller: Controllers;

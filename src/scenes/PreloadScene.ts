@@ -5,6 +5,7 @@ import {
   MapKeysEnums,
   SceneKeysEnums,
   AttacksKeysEnums,
+  AbilitiesKeysEnum,
 } from "../types/keys";
 import { selectionOptions } from "./SelectionScene";
 
@@ -19,6 +20,7 @@ export class PreloadScene extends Phaser.Scene {
   preload() {
     this.#preloadTilesets();
     this.#preloadWalkingAnimations();
+    this.#preloadDashAnimation();
     this.#preloadAttackAnimations();
     this.#preloadSelectionAnimations();
     this.#preloadSounds();
@@ -28,6 +30,7 @@ export class PreloadScene extends Phaser.Scene {
     this.#createSounds();
     this.#createPokemonSelectionAnimations();
     this.#createPokemonWalkingAnimations();
+    this.#createDashAnimation();
     this.#createAttackAnimations();
 
     this.global.selectCharacter = PokemonKeysEnums.TORCHIC;
@@ -69,6 +72,13 @@ export class PreloadScene extends Phaser.Scene {
     );
   }
 
+  #preloadDashAnimation() {
+    this.load.spritesheet(AbilitiesKeysEnum.DASH, "/assets/dash.png", {
+      frameWidth: 64,
+      frameHeight: 64,
+    });
+  }
+
   #preloadWalkingAnimations() {
     for (const pokemonKey in PokemonKeysEnums) {
       this.load.spritesheet(
@@ -94,6 +104,17 @@ export class PreloadScene extends Phaser.Scene {
 
   #createSounds() {
     this.global.soundManager.create(this);
+  }
+
+  #createDashAnimation() {
+    this.anims.create({
+      key: `${AbilitiesKeysEnum.DASH}_ANIM`,
+      frames: this.anims.generateFrameNumbers(AbilitiesKeysEnum.DASH, {
+        start: 0,
+        end: 9,
+      }),
+      frameRate: 9,
+    });
   }
 
   #createPokemonSelectionAnimations() {

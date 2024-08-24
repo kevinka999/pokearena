@@ -1,7 +1,7 @@
 import { nanoid } from "nanoid";
 import { GameObjectConfig } from "../types/game";
 import { AnimationKeysEnums, DepthEnum } from "../types/keys";
-import { ControllerKeysEnum } from "./Controller";
+import { ControllerKeysEnum, movimentationDirections } from "./Controller";
 
 type IdleFrameConfig = { [key in ControllerKeysEnum]?: number };
 
@@ -82,9 +82,13 @@ export class Player {
     moveDirections: ControllerKeysEnum[],
     lookDirection: ControllerKeysEnum
   ) {
-    this.#handleMovement(moveDirections);
+    if (this.#freeze) return;
+    const filteredMovimentationDirections = moveDirections.filter((direction) =>
+      movimentationDirections.includes(direction)
+    );
+    const isMoving = filteredMovimentationDirections?.length > 0;
 
-    const isMoving = moveDirections.length > 0;
+    this.#handleMovement(filteredMovimentationDirections);
     this.#handleLookDirection(lookDirection, isMoving);
   }
 
@@ -104,7 +108,7 @@ export class Player {
   }
 
   #handleMovement(directions: ControllerKeysEnum[]) {
-    if (this.#freeze || directions.length === 0) {
+    if (directions?.length === 0) {
       this.#gameObject.body.setVelocity(0);
       return;
     }

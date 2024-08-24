@@ -31,7 +31,7 @@ export class BattleScene extends Phaser.Scene {
 
   update(timer: number, delta: number) {
     this.#handlePlayerActions(timer);
-    this.#handleBotActions(timer);
+    // this.#handleBotActions(timer);
   }
 
   #init() {

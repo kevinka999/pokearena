@@ -5,7 +5,8 @@ import {
   PokemonTypes,
 } from "../types/game";
 import { PokemonStatus } from "../types/keys";
-import { ControllerKeysEnum } from "./Controller";
+import { ControllerKeysEnum, movimentationDirections } from "./Controller";
+import { Dash } from "./Dash";
 import { GameMechanicUtils } from "./GameMechanicUtils";
 import { Player, PlayerParams } from "./Player";
 
@@ -27,7 +28,7 @@ export enum ColldownEnum {
 }
 
 const COOLDOWN_MAPPER: Record<ColldownEnum, number> = {
-  DASH: 5000,
+  DASH: 1000,
   PRIMARY_ATTACK: 1000,
 };
 
@@ -191,17 +192,10 @@ export class Pokemon extends Player {
   }
 
   dash(timer: number, directions: ControllerKeysEnum[]) {
-    if (
-      !directions.includes(ControllerKeysEnum.SHIFT) ||
-      !directions.some((direction) =>
-        [
-          ControllerKeysEnum.A,
-          ControllerKeysEnum.D,
-          ControllerKeysEnum.S,
-          ControllerKeysEnum.W,
-        ].includes(direction)
-      )
-    )
+    const directionToGo = directions.find((direction) =>
+      movimentationDirections.includes(direction)
+    );
+    if (!directions.includes(ControllerKeysEnum.SHIFT) || !directionToGo)
       return;
 
     const isCooldown = this.#cooldown.get(ColldownEnum.DASH);
@@ -209,63 +203,15 @@ export class Pokemon extends Player {
 
     this.#cooldown.set(ColldownEnum.DASH, timer);
     this.freeze = true;
-    if (directions.includes(ControllerKeysEnum.A)) {
-      this.#scene.tweens.add({
-        targets: { velocity: 0 },
-        velocity: -300,
-        duration: 200,
-        ease: Phaser.Math.Easing.Cubic.Out,
-        onUpdate: (_tween, target) => {
-          this.gameObject.body.setVelocityX(target.velocity);
-        },
-        onComplete: () => {
-          this.freeze = false;
-        },
-        callbackScope: this,
-      });
-    } else if (directions.includes(ControllerKeysEnum.D)) {
-      this.#scene.tweens.add({
-        targets: { velocity: 0 },
-        velocity: 300,
-        duration: 200,
-        ease: Phaser.Math.Easing.Cubic.Out,
-        onUpdate: (_tween, target) => {
-          this.gameObject.body.setVelocityX(target.velocity);
-        },
-        onComplete: () => {
-          this.freeze = false;
-        },
-        callbackScope: this,
-      });
-    } else if (directions.includes(ControllerKeysEnum.W)) {
-      this.#scene.tweens.add({
-        targets: { velocity: 0 },
-        velocity: -300,
-        duration: 200,
-        ease: Phaser.Math.Easing.Cubic.Out,
-        onUpdate: (_tween, target) => {
-          this.gameObject.body.setVelocityY(target.velocity);
-        },
-        onComplete: () => {
-          this.freeze = false;
-        },
-        callbackScope: this,
-      });
-    } else if (directions.includes(ControllerKeysEnum.S)) {
-      this.#scene.tweens.add({
-        targets: { velocity: 0 },
-        velocity: 300,
-        duration: 200,
-        ease: Phaser.Math.Easing.Cubic.Out,
-        onUpdate: (_tween, target) => {
-          this.gameObject.body.setVelocityY(target.velocity);
-        },
-        onComplete: () => {
-          this.freeze = false;
-        },
-        callbackScope: this,
-      });
-    }
+
+    new Dash({
+      scene: this.#scene,
+      direction: directionToGo,
+      gameObject: this.gameObject,
+      onComplete: () => {
+        this.freeze = false;
+      },
+    });
   }
 
   handleCooldown(timer: number) {

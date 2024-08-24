@@ -14,6 +14,23 @@ export class Utils {
     return direction;
   }
 
+  static getVectorFromControllerDirection(
+    direction: ControllerKeysEnum
+  ): Phaser.Math.Vector2 {
+    switch (direction) {
+      case ControllerKeysEnum.A:
+        return new Phaser.Math.Vector2(-1, 0);
+      case ControllerKeysEnum.D:
+        return new Phaser.Math.Vector2(1, 0);
+      case ControllerKeysEnum.W:
+        return new Phaser.Math.Vector2(0, -1);
+      case ControllerKeysEnum.S:
+        return new Phaser.Math.Vector2(0, 1);
+      default:
+        throw new Error("Direction not defined");
+    }
+  }
+
   static getAngleDegressFromDirection(vector: Phaser.Math.Vector2): number {
     const pointerAngle = Math.atan2(vector.y, vector.x);
     return Math.round((Phaser.Math.RadToDeg(pointerAngle) + 360) % 360);
