@@ -36,7 +36,7 @@ jobs:
       - run:
           name: Deploy
           command: |
-            rsync -avz --delete -e "ssh -o StrictHostKeyChecking=no" dist/ $VPS_USER@$VPS_HOST:/var/www/pokearena/
+            rsync -avz --delete -e "ssh -o StrictHostKeyChecking=no" dist/ $VPS_USER@$VPS_HOST:/var/www/pokearena/dist/
 
 workflows:
   deploy:
