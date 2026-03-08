@@ -11,6 +11,7 @@ type CharacterSelection = {
   container: Phaser.GameObjects.Container;
   pokemonKey: PokemonKeysEnums;
   isSelected: boolean;
+  overlay: Phaser.GameObjects.Graphics;
 };
 
 export const selectionOptions: PokemonKeysEnums[] = [
@@ -169,6 +170,7 @@ export class SelectionScene extends Phaser.Scene {
       ]),
       pokemonKey: pokemon.key,
       isSelected: false,
+      overlay,
     });
   }
 
@@ -176,9 +178,7 @@ export class SelectionScene extends Phaser.Scene {
     const sprite = character.container.getAt(1) as Phaser.GameObjects.Sprite;
     sprite.play(`${character.pokemonKey.toUpperCase()}_SELECTION_ANIM`);
 
-    const overlayToDestroy = character.container.getAt(2);
-    character.container.remove(overlayToDestroy);
-    overlayToDestroy.destroy();
+    character.overlay.setVisible(false);
 
     character.isSelected = true;
     this.#characters.set(index, character);
@@ -189,18 +189,8 @@ export class SelectionScene extends Phaser.Scene {
     sprite.anims.stop();
     sprite.setFrame("0001.png");
 
-    const overlay = this.add.graphics();
-    overlay
-      .fillStyle(0x000000, 0.8)
-      .fillRect(
-        this.#borderSize / 2,
-        this.#borderSize / 2,
-        this.#frame.width - this.#borderSize,
-        this.#frame.height - this.#borderSize
-      );
-
+    character.overlay.setVisible(true);
     character.isSelected = false;
-    character.container.add(overlay);
     this.#characters.set(index, character);
   }
 
