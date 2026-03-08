@@ -26,12 +26,11 @@ export class BattleScene extends Phaser.Scene {
     this.#handleCollision();
 
     this.scene.launch(SceneKeysEnums.BATTLE_HUD);
-    this.#background.turnOnDebugMode();
   }
 
   update(timer: number, delta: number) {
     this.#handlePlayerActions(timer);
-    // this.#handleBotActions(timer);
+    this.#handleBotActions(timer);
   }
 
   #init() {

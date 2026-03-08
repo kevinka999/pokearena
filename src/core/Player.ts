@@ -109,21 +109,33 @@ export class Player {
 
   #handleMovement(directions: ControllerKeysEnum[]) {
     if (directions?.length === 0) {
-      this.#gameObject.body.setVelocity(0);
+      this.#gameObject.body.setVelocity(0, 0);
       return;
     }
 
+    const speed = 80;
+    let velocityX = 0;
+    let velocityY = 0;
+
     if (directions.includes(ControllerKeysEnum.A)) {
-      this.#gameObject.body.setVelocityX(-80);
+      velocityX -= speed;
     } else if (directions.includes(ControllerKeysEnum.D)) {
-      this.#gameObject.body.setVelocityX(80);
+      velocityX += speed;
     }
 
     if (directions.includes(ControllerKeysEnum.W)) {
-      this.#gameObject.body.setVelocityY(-80);
+      velocityY -= speed;
     } else if (directions.includes(ControllerKeysEnum.S)) {
-      this.#gameObject.body.setVelocityY(80);
+      velocityY += speed;
     }
+
+    if (velocityX !== 0 && velocityY !== 0) {
+      const diagonalFactor = 1 / Math.sqrt(2);
+      velocityX *= diagonalFactor;
+      velocityY *= diagonalFactor;
+    }
+
+    this.#gameObject.body.setVelocity(velocityX, velocityY);
   }
 
   #handleLookDirection(lookDirection: ControllerKeysEnum, isMoving: boolean) {

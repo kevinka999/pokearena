@@ -33,9 +33,8 @@ export class PreloadScene extends Phaser.Scene {
     this.#createDashAnimation();
     this.#createAttackAnimations();
 
-    this.global.selectCharacter = PokemonKeysEnums.TORCHIC;
-    this.scene.start(SceneKeysEnums.BATTLE);
-    // this.scene.switch(SceneKeysEnums.SELECTION);
+    // this.global.selectCharacter = PokemonKeysEnums.TORCHIC;
+    this.scene.start(SceneKeysEnums.SELECTION);
   }
 
   #preloadSelectionAnimations() {
