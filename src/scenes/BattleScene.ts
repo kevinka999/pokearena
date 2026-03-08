@@ -128,9 +128,10 @@ export class BattleScene extends Phaser.Scene {
     );
     const lookDirection = Utils.getControllerDirectionFromVector(vector);
     const playerKeysPressed = this.#controller.getKeysPressed();
+    const dashDirection = this.#controller.consumeDoubleTapDirection();
 
     this.#player.handleCooldown(timer);
-    this.#player.dash(timer, playerKeysPressed);
+    this.#player.dash(timer, dashDirection);
     this.#player.movePlayer(playerKeysPressed, lookDirection);
     this.#camera.handleMovingFollowOffset(playerKeysPressed);
   }
