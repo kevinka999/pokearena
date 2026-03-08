@@ -117,15 +117,28 @@ export class Player {
     let velocityX = 0;
     let velocityY = 0;
 
-    if (directions.includes(ControllerKeysEnum.A)) {
+    const isLeftPressed =
+      directions.includes(ControllerKeysEnum.A) ||
+      directions.includes(ControllerKeysEnum.ARROW_LEFT);
+    const isRightPressed =
+      directions.includes(ControllerKeysEnum.D) ||
+      directions.includes(ControllerKeysEnum.ARROW_RIGHT);
+    const isUpPressed =
+      directions.includes(ControllerKeysEnum.W) ||
+      directions.includes(ControllerKeysEnum.ARROW_UP);
+    const isDownPressed =
+      directions.includes(ControllerKeysEnum.S) ||
+      directions.includes(ControllerKeysEnum.ARROW_DOWN);
+
+    if (isLeftPressed) {
       velocityX -= speed;
-    } else if (directions.includes(ControllerKeysEnum.D)) {
+    } else if (isRightPressed) {
       velocityX += speed;
     }
 
-    if (directions.includes(ControllerKeysEnum.W)) {
+    if (isUpPressed) {
       velocityY -= speed;
-    } else if (directions.includes(ControllerKeysEnum.S)) {
+    } else if (isDownPressed) {
       velocityY += speed;
     }
 

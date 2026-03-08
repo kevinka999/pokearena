@@ -191,12 +191,9 @@ export class Pokemon extends Player {
     });
   }
 
-  dash(timer: number, directions: ControllerKeysEnum[]) {
-    const directionToGo = directions.find((direction) =>
-      movimentationDirections.includes(direction)
-    );
-    if (!directions.includes(ControllerKeysEnum.SHIFT) || !directionToGo)
-      return;
+  dash(timer: number, direction?: ControllerKeysEnum) {
+    const directionToGo = this.#normalizeDirection(direction);
+    if (!directionToGo) return;
 
     const isCooldown = this.#cooldown.get(ColldownEnum.DASH);
     if (isCooldown) return;
@@ -212,6 +209,27 @@ export class Pokemon extends Player {
         this.freeze = false;
       },
     });
+  }
+
+  #normalizeDirection(direction?: ControllerKeysEnum) {
+    if (!direction) return undefined;
+    switch (direction) {
+      case ControllerKeysEnum.ARROW_LEFT:
+        return ControllerKeysEnum.A;
+      case ControllerKeysEnum.ARROW_RIGHT:
+        return ControllerKeysEnum.D;
+      case ControllerKeysEnum.ARROW_UP:
+        return ControllerKeysEnum.W;
+      case ControllerKeysEnum.ARROW_DOWN:
+        return ControllerKeysEnum.S;
+      case ControllerKeysEnum.A:
+      case ControllerKeysEnum.D:
+      case ControllerKeysEnum.W:
+      case ControllerKeysEnum.S:
+        return direction;
+      default:
+        return undefined;
+    }
   }
 
   handleCooldown(timer: number) {
