@@ -5,7 +5,7 @@
 - A cena de batalha controla um `Player` dirigido pelo teclado/ponteiro e um `Bot` (hoje `Squirtle`), onde colisões e overlaps disparam eventos globais de dano que o HUD usa para atualizar barras de vida.
 
 ## Arquitetura principal
-- **Scenes:** `PreloadScene` prepara animações e assets; `SelectionScene` exige WSAD + SPACE para navegar/confirmar e seta o `GlobalPlugin.selectCharacter`; `BattleScene` instancia o jogador, bot, camera e background antes de lançar o `HudScene`.
+- **Scenes:** `PreloadScene` prepara animações e assets; `SelectionScene` exige WSAD + SPACE (ou setas) para navegar/confirmar, reutiliza o painel que abre ao clicar no “?” do header para mostrar os ícones de `public/assets/inputs` (movimento, dash e ataques) e seta o `GlobalPlugin.selectCharacter`; `BattleScene` instancia o jogador, bot, câmera e background antes de lançar o `HudScene`.
 - **GlobalPlugin:** plugin global instanciado por Phaser que guarda o Pokémon selecionado, expõe `soundManager` e eventos, e mapeia as chaves de `PokemonKeysEnums` para as classes concretas em `src/pokemons`.
 - **Core:** `Pokemon`, `Attack`, `Background`, `Controller`, `HealthBar`, `SoundManager`, `Utils` e auxiliares embalam movimento, dash, cooldowns e gestão de vida compartilhada pelo evento global de dano.
 - **Assets & dados:** `public/assets/` (spritesheets, sons, tilesets) e `public/data/` (JSONs de animação) são referenciados pelos enums em `src/types/keys` para centralizar paths.
